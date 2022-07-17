@@ -1,0 +1,909 @@
+---
+title: "CV4.1: Carnival_subsets_khavari_final"
+author: "C.deVriend"
+date: "15-6-2022"
+output: html_document
+toc: yes
+toc_float: yes
+number_sections: yes
+theme: readable
+code_folding: hide
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+#install.packages("here")
+library(here)
+experiment_nr <- "CV_2"
+```
+
+```{css, echo=FALSE}
+pre {  max-height: 300px;
+       overflow-y: auto;
+}
+pre[class] {  max-height: 100px;}
+```
+
+```{r, start_rwflow}
+# First we will start working with workflowr
+#install.packages("workflowr")
+#library(workflowr)
+#wflow_git_config(user.name = "cheyennedevriend",user.email = cheyenne.devriend@ru.nl")
+#wflow_start("/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL", existing = TRUE)
+#set_here(path = "C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL")
+```
+
+# Network reconstruction with Carnival
+
+We have the option to look up each separate gene in literature. However, this will take a lot of time for all the comparisons. Therefore, the CAusal Reasoning pipeline for Network identification using Integer VALue programming (CARNIVAL) may be a valuable tool. The aim is to identify a subset of interactions from a prior knowledge network that represents potential regulated pathways. Consequently, it can aid us to identify the upstream regulatory signalling pathways from the downstream gene expression (1).
+
+
+
+## Unravelling keratinocyte differentiation networks
+
+In this particular analysis we will asses each of the subsets created from the Khavari P. et al., (2020) dataset (2). 
+
+The aim of CARNIVAL is to identify a subset of interactions from a prior knowledge network, a network that represents potential regulated pathways linking known or potential targets related to keratinoycte differentiation, to active transcription factors derived from GEX data.
+
+Before I start the carnival analysis I want to get an understanding about the correlations between TF activity and pathway activity.
+```{r}
+# load pathway activity form progeny and TOP25 TF activity from dorothea
+library(readxl)
+library(dplyr)
+
+# TF
+Summarized_union_Top25_TF_activities_over_time <- read_excel("../data/TF and pathway activities/Summarized_union_Top25_TF_activities_over_time.xlsx")
+# Remove unwanted columns
+Summarized_union_Top25_TF_activities_over_time<-Summarized_union_Top25_TF_activities_over_time%>%
+  select(-...1)
+# Rownames
+Summarized_union_Top25_TF_activities_over_time<- tibble::column_to_rownames(Summarized_union_Top25_TF_activities_over_time, var = "rowname")
+
+#Pathways
+Summarized_union_pathway_activity <- read_excel("../data/TF and pathway activities/Summarized_union_pathway_activity.xlsx")
+# Add column with names identical to time names in other df
+Summarized_union_pathway_activity$rowname<-c("Day_0","Day_0.5","Day_1","Day_1.5","Day_2","Day_2.5","Day_3","Day_4.5","Day_5","Day_6")
+# column to rowname
+Summarized_union_pathway_activity<- tibble::column_to_rownames(Summarized_union_pathway_activity, var = "rowname")
+# Remove unwanted column
+Summarized_union_pathway_activity<-Summarized_union_pathway_activity %>% select(-Days)
+# transpose
+Summarized_union_pathway_activity<-t(Summarized_union_pathway_activity)
+
+# Combine two dataframes
+Merged_TF_PATHWAY_Activity<-rbind(Summarized_union_pathway_activity,Summarized_union_Top25_TF_activities_over_time)
+# Transpose
+Merged_TF_PATHWAY_Activity<-t(Merged_TF_PATHWAY_Activity)
+
+
+# Create corr matrix
+Pathway_TF_correlations<-cor(Merged_TF_PATHWAY_Activity) # This functions gives us the correlation coefficients between the possible pairs of variables
+
+# REMOVE PATHWAYS FROM ROWS BASED UPON NAME
+row_names_df_to_remove<-c("Androgen","EGFR"   ,  "Estrogen" ,"Hypoxia" , "JAK.STAT", "MAPK"   ,  "NFkB"   ,  "p53"   ,   "PI3K"  ,   "TGFb"  ,   "TNFa"   ,  "Trail"  , 
+ "VEGF"  ,   "WNT" )
+
+Pathway_TF_correlations<-Pathway_TF_correlations[!(row.names(Pathway_TF_correlations) %in% row_names_df_to_remove),]
+
+# REMOVE TFS FROM COLUMNS
+Pathway_TF_correlations<- t(Pathway_TF_correlations)
+row_names_df_to_remove<-c("ARID2" , "E2F1",   "E2F4",   "EHF",    "FOXM1",  "FOXO1",  "FOXO3",  "HBP1",   "HNF1B",  "IRF1",   "IRF2" ,  "LYL1",   "MNT"  ,  "MYC", "NFKB1",  "NFYB"  , "SPI1"  , "STAT2" , "TCF7"  , "ZBTB11", "ZNF740")
+Pathway_TF_correlations<-Pathway_TF_correlations[!(row.names(Pathway_TF_correlations) %in% row_names_df_to_remove),]
+Pathway_TF_correlations<- t(Pathway_TF_correlations)
+
+# The function rcorr() [in Hmisc package] can be used to compute the significance levels for pearson and spearman correlations. It returns both the correlation coefficients and the p-value of the correlation for all possible pairs of columns in the data table.
+# Load library
+#install.packages("Hmisc")
+library(Hmisc)
+# convert to matrix: MAKE SURE TO DO THIS OTHERWISE YOU'LL KEEP GETTING THE ERROR: "Error in storage.mode(x) <- "double"  'list' object cannot be coerced to type 'double' "
+Pathway_TF_correlations<-as.matrix(Merged_TF_PATHWAY_Activity) 
+
+# calculate correlation and p-values
+correlation_significance<-rcorr(Merged_TF_PATHWAY_Activity, type = c("pearson"))  
+
+# Start formatting the correlation matrix; convert to table with 4 columns containing:
+# 1. row names (variable 1 for corr test)
+# 2. col names (var 2 for corr test)
+# 3. corr coefficients
+# 4. P-values of corr
+
+#--------------
+# Install function
+# ++++++++++++++++++++++++++++
+# flattenCorrMatrix
+# ++++++++++++++++++++++++++++
+# cormat : matrix of the correlation coefficients
+# pmat : matrix of the correlation p-values
+flattenCorrMatrix <- function(cormat, pmat) {
+  ut <- upper.tri(cormat)
+  data.frame(
+    row = rownames(cormat)[row(cormat)[ut]],
+    column = rownames(cormat)[col(cormat)[ut]],
+    cor  =(cormat)[ut],
+    p = pmat[ut]
+    )
+}
+
+#------------
+
+# Start formatting
+correlation_significance_formatted<-rcorr(Merged_TF_PATHWAY_Activity)
+flattenCorrMatrix(correlation_significance$r,correlation_significance$P)
+
+# Symnum() function; change numbers to symbols for easier understanding!
+# x: the correlation matrix to visualize
+# cutpoints: correlation coefficient cutpoints. The correlation coefficients between 0 and 0.3 are #replaced by a space (" “); correlation coefficients between 0.3 and 0.6 are replace by”.“; etc … symbols : the symbols to use. 
+# abbr.colnames: logical value. If TRUE, colnames are abbreviated.
+#correlations_symnum<-symnum(Pathway_TF_correlations, abbr.colnames = FALSE)
+#print(paste("Pathway TF correlations"))
+#pathway_correlations_symnum
+
+# Visualize results using corrplot: Draw a correlogram
+# Install package/library
+#install.packages("corrplot")
+library(corrplot)
+# First a corrplot of the correlations only so use "Pathway_correlations")
+#corrplot(correlation_significance_formatted), type = "upper", order = "hclust", tl.col = "black", tl.srt = 45) 
+# the correlation matrix is reordered according to the correlation coefficient using "hclust" method
+# tl.col (for text label color) and tl.srt (for text label string rotation) are used to change text colors and rotations
+# Possible values for the argument tye are: "upper", "lower", "full"
+# Positive correlations are displayed in blue, and negative correlations in red. color intensity and the size of the circle ar proportional to the correlation coefficients. in the right side of the correlogram, the lengend colors show the correlation coefficients and the corresponding colors.
+
+
+# start removing some of the df so it will only contain what we need
+  # REMOVE PATHWAYS FROM ROWS BASED UPON NAME
+row_names_df_to_remove<-c("Androgen","EGFR"   ,  "Estrogen" ,"Hypoxia" , "JAK.STAT", "MAPK"   ,  "NFkB"   ,  "p53"   ,   "PI3K"  ,   "TGFb"  ,   "TNFa"   ,  "Trail"  , 
+ "VEGF"  ,   "WNT" )
+# First for correlation
+correlation_significance_R<-correlation_significance$r[!(row.names(correlation_significance$r) %in% row_names_df_to_remove),]
+# Second for singificance
+correlation_significance_P<-correlation_significance$P[!(row.names(correlation_significance$P) %in% row_names_df_to_remove),]
+# Third for amount
+correlation_significance_N<-correlation_significance$n[!(row.names(correlation_significance$n) %in% row_names_df_to_remove),]
+
+# Transpose
+correlation_significance_R<-t(correlation_significance_R)
+correlation_significance_P<-t(correlation_significance_P)
+correlation_significance_N<-t(correlation_significance_N)
+  
+  # REMOVE TFS FROM COLUMNS
+row_names_df_to_remove<-c("ARID2" , "E2F1",   "E2F4",   "EHF",    "FOXM1",  "FOXO1",  "FOXO3",  "HBP1",   "HNF1B",  "IRF1",   "IRF2" ,  "LYL1",   "MNT"  ,  "MYC", "NFKB1",  "NFYB"  , "SPI1"  , "STAT2" , "TCF7"  , "ZBTB11", "ZNF740")
+# First for correlation
+correlation_significance_R<-correlation_significance_R[!(row.names(correlation_significance_R) %in% row_names_df_to_remove),]
+# Second for singificance
+correlation_significance_P<-correlation_significance_P[!(row.names(correlation_significance_P) %in% row_names_df_to_remove),]
+# Third for amount
+correlation_significance_N<-correlation_significance_N[!(row.names(correlation_significance_N) %in% row_names_df_to_remove),]
+
+# Transpose
+correlation_significance<-t(correlation_significance)
+
+# However something that is way more interesting is combining the correlations with the significance of those correlations. Therefore, the following analysis will combine these.
+# This piece of code will make sure the non-significant correlations are left out of the graph
+corrplot(correlation_significance_R, type = "upper", order = "hclust", p.mat = correlation_significance_P, sig.level = 0.05, insig = "blank", tl.col = "black", tl.srt = 45) # Use this line to determine the significant correlations, i used a # here as it otherwise crashes during knitting
+```
+```{r, Loading_libraries}
+# Load libraries
+library(progeny)
+library(dorothea)
+library(CARNIVAL)
+library(OmnipathR)
+library(readr)
+library(tibble)
+library(tidyr)
+library(dplyr)
+library(visNetwork)
+
+library(ggplot2)
+library(pheatmap)
+
+
+## For the volcano plot 
+library(ggrepel)
+```
+
+```{r, generating_support_functions}
+#'\code{generateTFList}
+#'
+#' Creating regulon list similar to vipper from an interaction data-frame
+#' 
+#' @param df dataframe with TF activities
+#' @param top number of top regulated TF's (default set to top = 50)
+#' @param access_idx index of the sample to consider (default set to 
+#' access_idx = 1)
+#' 
+#'
+#'Enio Gjerga, 2020
+
+generateTFList <- function(df = df, top = 50, access_idx = 1){
+  
+  if(top=="all"){
+    top <- nrow(df)
+  }
+  
+  if(top > nrow(df)){
+    warning("Number of to TF's inserted exceeds the number of actual TF's in the
+            data frame. All the TF's will be considered.")
+    top <- nrow(df)
+  }
+  
+  ctrl <- intersect(x = access_idx, y = 1:ncol(df))
+  if(length(ctrl)==0){
+    stop("The indeces you inserted do not correspond to 
+              the number of columns/samples")
+  }
+  
+  returnList <- list()
+  
+  for(ii in 1:length(ctrl)){
+    
+    tfThresh <- sort(x = abs(df[, ctrl[ii]]), decreasing = TRUE)[top]
+    temp <- which(abs(df[, ctrl[ii]])>=tfThresh)
+    
+    currDF <- matrix(data = , nrow = 1, ncol = top)
+    colnames(currDF) <- rownames(df)[1:top]
+    currDF[1, ] <- df[temp[1:top], ctrl[ii]]
+    currDF <- as.data.frame(currDF)
+    
+    returnList[[length(returnList)+1]] <- currDF
+    
+  }
+  
+  names(returnList) <- colnames(df)[ctrl]
+  
+  return(returnList)
+  
+}
+
+
+#'\code{assignPROGENyScores}
+#'
+#'@param progeny contains the progeny scores as obtained from \code{runPROGENy}.
+#'@param progenyMembers contains the list of members for each PROGENy pathway.
+#'@param id contains the members identifiers (default: gene).
+#'@param access_idx index of the sample to consider (default set to 
+#'access_idx = 1)
+#'
+#'@return This function is used to account for the PROGENy scores in the 
+#'objective function. It creates a list object with progeny scores for a 
+#'selected set of samples (by default for all of them)
+#'
+#'@export
+#'
+#'Enio Gjerga & Panuwat Trairatphisan, 2020
+
+assignPROGENyScores <- function(progeny = progeny, 
+                                progenyMembers = progenyMembers, 
+                                id = "gene", access_idx = 1){
+  
+  if(id=="uniprot"){
+    
+    idx <- which(names(progenyMembers)=="uniprot")
+    progenyMembers <- progenyMembers[[idx]]
+    
+  } else {
+    
+    idx <- which(names(progenyMembers)=="gene")
+    progenyMembers <- progenyMembers[[idx]]
+    
+  }
+  
+  members <- matrix(data = , nrow = 1, ncol = 2)
+  pathways <- colnames(progeny)
+  
+  ctrl <- intersect(x = access_idx, y = 1:nrow(progeny))
+  if(length(ctrl)==0){
+    stop("The indeces you inserted do not correspond to 
+              the number of rows/samples")
+  }
+  
+  for(ii in 1:length(pathways)){
+    
+    mm <- progenyMembers[[which(names(progenyMembers)==pathways[ii])]]
+    for(jj in 1:length(mm)){
+      
+      members <- rbind(members, c(pathways[ii], mm[jj]))
+      
+    }
+    
+  }
+  
+  members <- members[-1, ]
+  
+  scores <- matrix(data = , nrow = nrow(progeny), ncol = nrow(members))
+  colnames(scores) <- members[, 2]
+  rownames(scores) <- rownames(progeny)
+  
+  members <- unique(members)
+  
+  for(i in 1:ncol(scores)){
+    
+    for(j in 1:nrow(scores)){
+      
+      scores[j, i] <- 
+        as.numeric(
+          progeny[j, members[which(members[, 2]==colnames(scores)[i]), 1]])
+      
+    }
+    
+  }
+  
+  pxList <- list()
+  for(ii in 1:length(access_idx)){
+    pxList[[length(pxList)+1]] <- 
+      as.data.frame(t(as.matrix(scores[access_idx[ii], ])))
+  }
+  
+  names(pxList) <- rownames(progeny)[ctrl]
+  
+  return(pxList)
+
+  
+}
+```
+
+
+```{r, Loading_data}
+# Load data
+here()
+# Data from TF analysis with Dorothea
+TFactivity_CARNIVALinput_0_0_5 <- read_csv("C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/DoRothEA data/TFactivity_CARNIVALinput_0_0.5.csv")
+TFactivity_CARNIVALinput_0_5_1 <- read_csv("C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/DoRothEA data/TFactivity_CARNIVALinput_0.5_1.csv")
+TFactivity_CARNIVALinput_1_1_5 <- read_csv("C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/DoRothEA data/TFactivity_CARNIVALinput_1_1.5.csv")
+TFactivity_CARNIVALinput_1_5_2 <- read_csv("C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/DoRothEA data/TFactivity_CARNIVALinput_1.5_2.csv")
+TFactivity_CARNIVALinput_2_2_5 <- read_csv("C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/DoRothEA data/TFactivity_CARNIVALinput_2_2.5.csv")
+TFactivity_CARNIVALinput_2_5_3 <- read_csv("C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/DoRothEA data/TFactivity_CARNIVALinput_2.5_3.csv")
+TFactivity_CARNIVALinput_3_4_5 <- read_csv("C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/DoRothEA data/TFactivity_CARNIVALinput_3_4.5.csv")
+TFactivity_CARNIVALinput_4_5_5 <- read_csv("C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/DoRothEA data/TFactivity_CARNIVALinput_4.5_5.csv")
+TFactivity_CARNIVALinput_5_6 <- read_csv("C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/DoRothEA data/TFactivity_CARNIVALinput_5_6.csv")
+
+# Create list object
+TFactivity_CARNIVAL_input.list<-list(TFactivity_CARNIVALinput_0_0_5,TFactivity_CARNIVALinput_0_5_1,TFactivity_CARNIVALinput_1_1_5,TFactivity_CARNIVALinput_1_5_2,TFactivity_CARNIVALinput_2_2_5,TFactivity_CARNIVALinput_2_5_3,TFactivity_CARNIVALinput_3_4_5,TFactivity_CARNIVALinput_4_5_5,TFactivity_CARNIVALinput_5_6)
+# Assign appropriate names per object
+names(TFactivity_CARNIVAL_input.list)<-c('Subset day 0 vs. 0.5','Subset day 0.5 vs. 1','Subset day 1 vs. 1.5', 'Subset day 1.5 vs. 2', 'Subset day 2 vs. 2.5', 'Subset day 2.5 vs. day 3', 'Subset day 3 vs. day 4.5', 'Subset day 4.5 vs. day 5', 'Subset day 5 vs 6')
+
+# Data from Pathway analysis with Progeny
+PathwayActivity_CARNIVALinput_0_0_5 <- read_csv("C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/PROGENy data/PathwayActivity_CARNIVALinput_0_0.5.csv")
+PathwayActivity_CARNIVALinput_0_5_1 <- read_csv("C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/PROGENy data/PathwayActivity_CARNIVALinput_0.5_1.csv")
+PathwayActivity_CARNIVALinput_1_1_5 <- read_csv("C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/PROGENy data/PathwayActivity_CARNIVALinput_1_1.5.csv")
+PathwayActivity_CARNIVALinput_1_5_2 <- read_csv("C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/PROGENy data/PathwayActivity_CARNIVALinput_1.5_2.csv")
+PathwayActivity_CARNIVALinput_2_2_5 <- read_csv("C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/PROGENy data/PathwayActivity_CARNIVALinput_2_2.5.csv")
+PathwayActivity_CARNIVALinput_2_5_3 <- read_csv("C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/PROGENy data/PathwayActivity_CARNIVALinput_2.5_3.csv")
+PathwayActivity_CARNIVALinput_3_4_5 <- read_csv("C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/PROGENy data/PathwayActivity_CARNIVALinput_3_4.5.csv")
+PathwayActivity_CARNIVALinput_4_5_5 <- read_csv("C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/PROGENy data/PathwayActivity_CARNIVALinput_4.5_5.csv")
+PathwayActivity_CARNIVALinput_5_6 <- read_csv("C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/PROGENy data/PathwayActivity_CARNIVALinput_5_6.csv")
+
+# Create list object
+PathwayActivity_CARNIVALinput.list<-list(PathwayActivity_CARNIVALinput_0_0_5,PathwayActivity_CARNIVALinput_0_5_1,PathwayActivity_CARNIVALinput_1_1_5,PathwayActivity_CARNIVALinput_1_5_2,PathwayActivity_CARNIVALinput_2_2_5,PathwayActivity_CARNIVALinput_2_5_3,PathwayActivity_CARNIVALinput_3_4_5,PathwayActivity_CARNIVALinput_4_5_5,PathwayActivity_CARNIVALinput_5_6)
+# Assign appropriate names per object
+names(PathwayActivity_CARNIVALinput.list)<-c('Subset day 0 vs. 0.5','Subset day 0.5 vs. 1','Subset day 1 vs. 1.5', 'Subset day 1.5 vs. 2', 'Subset day 2 vs. 2.5', 'Subset day 2.5 vs. day 3', 'Subset day 3 vs. day 4.5', 'Subset day 4.5 vs. day 5', 'Subset day 5 vs 6')
+
+```
+
+## Getting the scaffold network from Omnipath
+
+In order to run CARNIVAL, it is a necessity to create a scaffold network that will function as a "map" to find the causal network of differentiation in the dataset subsets. Therefore, Omnipath will be employed as it has the ability to obtain signed and directed interactions from each of the available resources. To be more specific, CARNIVAL needs the information in a standard input/*sif* table format. This will lead to a map including a node/gene, possible interaction, second node/gene. In order to prepare the data accordingly the consensus columns of direction and signs will be used.
+
+The query will return either 0 or 1 as a logic status of a stimulated or inhibited reaction. Therefore, the output is reformulated to 1/-1 to indicate respective stimulation or inhibition. Then the option is to either keep the interactions that are consistent, or both alternatives (e.g. A1B;A-1B). In order to make sense of the enormous data pool, the choice has been made to only keep the consistent interactions.
+
+```{r, Import_Omnipath}
+omniR <- import_Omnipath_Interactions()
+```
+```{r, Omnipath_specifics}
+# This can be directly copied from the tutorial from Saez lab
+# Signed and directed
+omnipath_sd<-omniR %>% dplyr::filter(consensus_direction == 1 &
+                                (consensus_stimulation == 1 | 
+                                 consensus_inhibition == 1
+                                 )) 
+  
+# changing 0/1 criteria in consensus_stimulation/inhibition to -1/1
+omnipath_sd$consensus_stimulation[which( omnipath_sd$consensus_stimulation == 0)] = -1
+omnipath_sd$consensus_inhibition[which( omnipath_sd$consensus_inhibition == 1)] = -1
+omnipath_sd$consensus_inhibition[which( omnipath_sd$consensus_inhibition == 0)] = 1
+
+# check consistency on consensus sign and select only those in a SIF format
+sif <- omnipath_sd[,c('source_genesymbol', 'consensus_stimulation', 'consensus_inhibition', 'target_genesymbol')] %>%
+      dplyr::filter(consensus_stimulation==consensus_inhibition) %>%
+      unique.data.frame()
+
+sif$consensus_stimulation <- NULL
+colnames(sif) <- c('source', 'interaction', 'target')
+
+# remove complexes
+sif$source <- gsub(":", "_", sif$source)
+sif$target <- gsub(":", "_", sif$target)
+
+#save SIF
+write_tsv(sif, "omnipath_carnival.tsv")
+```
+
+## Transcription factor and pathway activities for CARNIVAL
+
+At this point the appropriate "interaction map" and data has been imported. Nevertheless, supplementary functions need to be employed as the formats from DoroThEA and PROGENy need to be converted to those appropriate vor CARNIVAL.
+
+```{r, TF_activities_for_Carnival}
+
+# By hand spend a lot of time on loops but did not work
+# Subset 1
+tf_activities_carnival_0_0.5<- data.frame(TFactivity_CARNIVAL_input.list$`Subset day 0 vs. 0.5`, stringsAsFactors = F)
+rownames(tf_activities_carnival_0_0.5) <- TFactivity_CARNIVAL_input.list$`Subset day 0 vs. 0.5`$TF
+tf_activities_carnival_0_0.5$TF <- NULL
+tf_activities_carnival_0_0.5$...1<-NULL
+tfList_subset1 = generateTFList(tf_activities_carnival_0_0.5, top=50, access_idx = 1)
+
+# Subset2
+tf_activities_carnival_0.5_1<- data.frame(TFactivity_CARNIVAL_input.list$`Subset day 0.5 vs. 1`, stringsAsFactors = F)
+rownames(tf_activities_carnival_0.5_1) <- TFactivity_CARNIVAL_input.list$`Subset day 0.5 vs. 1`$TF
+tf_activities_carnival_0.5_1$TF <- NULL
+tf_activities_carnival_0.5_1$...1<-NULL
+tfList_subset2 = generateTFList(tf_activities_carnival_0.5_1, top=50, access_idx = 1)
+
+#Subset3
+tf_activities_carnival_1_1.5<- data.frame(TFactivity_CARNIVAL_input.list$`Subset day 1 vs. 1.5`, stringsAsFactors = F)
+rownames(tf_activities_carnival_1_1.5) <- TFactivity_CARNIVAL_input.list$`Subset day 1 vs. 1.5`$TF
+tf_activities_carnival_1_1.5$TF <- NULL
+tf_activities_carnival_1_1.5$...1<-NULL
+tfList_subset3 = generateTFList(tf_activities_carnival_1_1.5, top=50, access_idx = 1)
+
+#Subset4
+tf_activities_carnival_1.5_2<- data.frame(TFactivity_CARNIVAL_input.list$`Subset day 1.5 vs. 2`, stringsAsFactors = F)
+rownames(tf_activities_carnival_1.5_2) <- TFactivity_CARNIVAL_input.list$`Subset day 1.5 vs. 2`$TF
+tf_activities_carnival_1.5_2$TF <- NULL
+tf_activities_carnival_1.5_2$...1<-NULL
+tfList_subset4 = generateTFList(tf_activities_carnival_1.5_2, top=50, access_idx = 1)
+
+#Subset5
+tf_activities_carnival_2_2.5<- data.frame(TFactivity_CARNIVAL_input.list$`Subset day 2 vs. 2.5`, stringsAsFactors = F)
+rownames(tf_activities_carnival_2_2.5) <- TFactivity_CARNIVAL_input.list$`Subset day 2 vs. 2.5`$TF
+tf_activities_carnival_2_2.5$TF <- NULL
+tf_activities_carnival_2_2.5$...1<-NULL
+tfList_subset5 = generateTFList(tf_activities_carnival_2_2.5, top=50, access_idx = 1)
+
+#Subset6
+tf_activities_carnival_2.5_3<- data.frame(TFactivity_CARNIVAL_input.list$`Subset day 2.5 vs. day 3`, stringsAsFactors = F)
+rownames(tf_activities_carnival_2.5_3) <- TFactivity_CARNIVAL_input.list$`Subset day 2.5 vs. day 3`$TF
+tf_activities_carnival_2.5_3$TF <- NULL
+tf_activities_carnival_2.5_3$...1<-NULL
+tfList_subset6 = generateTFList(tf_activities_carnival_2.5_3, top=50, access_idx = 1)
+
+#Subset7
+tf_activities_carnival_3_4.5<- data.frame(TFactivity_CARNIVAL_input.list$`Subset day 3 vs. day 4.5`, stringsAsFactors = F)
+rownames(tf_activities_carnival_3_4.5) <- TFactivity_CARNIVAL_input.list$`Subset day 3 vs. day 4.5`$TF
+tf_activities_carnival_3_4.5$TF <- NULL
+tf_activities_carnival_3_4.5$...1<-NULL
+tfList_subset7 = generateTFList(tf_activities_carnival_3_4.5, top=50, access_idx = 1)
+
+#Subset8
+tf_activities_carnival_4.5_5<- data.frame(TFactivity_CARNIVAL_input.list$`Subset day 4.5 vs. day 5`, stringsAsFactors = F)
+rownames(tf_activities_carnival_4.5_5) <- TFactivity_CARNIVAL_input.list$`Subset day 4.5 vs. day 5`$TF
+tf_activities_carnival_4.5_5$TF <- NULL
+tf_activities_carnival_4.5_5$...1<-NULL
+tfList_subset8 = generateTFList(tf_activities_carnival_4.5_5, top=50, access_idx = 1)
+
+#Subset9
+tf_activities_carnival_5_6<- data.frame(TFactivity_CARNIVAL_input.list$`Subset day 5 vs 6`, stringsAsFactors = F)
+rownames(tf_activities_carnival_5_6) <- TFactivity_CARNIVAL_input.list$`Subset day 5 vs 6`$TF
+tf_activities_carnival_5_6$TF <- NULL
+tf_activities_carnival_5_6$...1<-NULL
+tfList_subset9 = generateTFList(tf_activities_carnival_5_6, top=50, access_idx = 1)
+
+```
+
+```{r, Pathway_activities_for_Carnival }
+
+# PROGENy for CARNIVAL
+#load(file = system.file("progenyMembers.RData",package="CARNIVAL")) # standard command from Saez lab tutorial
+load("C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/Tutorial_Saez_lab/Full tutorial/data/progenyMembers.RData")
+
+# Now we start with the data
+# Subset1
+PathwayActivity_carnival_0_0.5 <- data.frame(PathwayActivity_CARNIVALinput.list$`Subset day 0 vs. 0.5`, stringsAsFactors = F)
+
+rownames(PathwayActivity_carnival_0_0.5) <- PathwayActivity_carnival_0_0.5$Pathway
+PathwayActivity_carnival_0_0.5$Pathway <- NULL
+PathwayActivity_carnival_0_0.5$...1 <- NULL
+
+progenylist_0_0.5 = assignPROGENyScores(progeny = t(PathwayActivity_carnival_0_0.5), 
+                                            progenyMembers = progenyMembers, 
+                                            id = "gene", 
+                                            access_idx = 1)
+
+# Subset2
+PathwayActivity_carnival_0.5_1 <- data.frame(PathwayActivity_CARNIVALinput.list$`Subset day 0.5 vs. 1`, stringsAsFactors = F)
+
+rownames(PathwayActivity_carnival_0.5_1) <- PathwayActivity_carnival_0.5_1$Pathway
+PathwayActivity_carnival_0.5_1$Pathway <- NULL
+PathwayActivity_carnival_0.5_1$...1 <- NULL
+
+progenylist_0.5_1 = assignPROGENyScores(progeny = t(PathwayActivity_carnival_0.5_1), 
+                                            progenyMembers = progenyMembers, 
+                                            id = "gene", 
+                                            access_idx = 1)
+
+# Subset3
+PathwayActivity_carnival_1_1.5 <- data.frame(PathwayActivity_CARNIVALinput.list$`Subset day 1 vs. 1.5`, stringsAsFactors = F)
+
+rownames(PathwayActivity_carnival_1_1.5) <- PathwayActivity_carnival_1_1.5$Pathway
+PathwayActivity_carnival_1_1.5$Pathway <- NULL
+PathwayActivity_carnival_1_1.5$...1 <- NULL
+
+progenylist_1_1.5 = assignPROGENyScores(progeny = t(PathwayActivity_carnival_1_1.5), 
+                                            progenyMembers = progenyMembers, 
+                                            id = "gene", 
+                                            access_idx = 1)
+
+# Subset4
+PathwayActivity_carnival_1.5_2 <- data.frame(PathwayActivity_CARNIVALinput.list$`Subset day 1.5 vs. 2`, stringsAsFactors = F)
+
+rownames(PathwayActivity_carnival_1.5_2) <- PathwayActivity_carnival_1.5_2$Pathway
+PathwayActivity_carnival_1.5_2$Pathway <- NULL
+PathwayActivity_carnival_1.5_2$...1 <- NULL
+
+progenylist_1.5_2 = assignPROGENyScores(progeny = t(PathwayActivity_carnival_1.5_2), 
+                                            progenyMembers = progenyMembers, 
+                                            id = "gene", 
+                                            access_idx = 1)
+
+# Subset5
+PathwayActivity_carnival_2_2.5 <- data.frame(PathwayActivity_CARNIVALinput.list$`Subset day 2 vs. 2.5`, stringsAsFactors = F)
+
+rownames(PathwayActivity_carnival_2_2.5) <- PathwayActivity_carnival_2_2.5$Pathway
+PathwayActivity_carnival_2_2.5$Pathway <- NULL
+PathwayActivity_carnival_2_2.5$...1 <- NULL
+
+progenylist_2_2.5 = assignPROGENyScores(progeny = t(PathwayActivity_carnival_2_2.5), 
+                                            progenyMembers = progenyMembers, 
+                                            id = "gene", 
+                                            access_idx = 1)
+
+# Subset6
+PathwayActivity_carnival_2.5_3 <- data.frame(PathwayActivity_CARNIVALinput.list$`Subset day 2.5 vs. day 3`, stringsAsFactors = F)
+
+rownames(PathwayActivity_carnival_2.5_3) <- PathwayActivity_carnival_2.5_3$Pathway
+PathwayActivity_carnival_2.5_3$Pathway <- NULL
+PathwayActivity_carnival_2.5_3$...1 <- NULL
+
+progenylist_2.5_3 = assignPROGENyScores(progeny = t(PathwayActivity_carnival_2.5_3), 
+                                            progenyMembers = progenyMembers, 
+                                            id = "gene", 
+                                            access_idx = 1)
+# Subset7
+PathwayActivity_carnival_3_4.5 <- data.frame(PathwayActivity_CARNIVALinput.list$`Subset day 3 vs. day 4.5`, stringsAsFactors = F)
+
+rownames(PathwayActivity_carnival_3_4.5) <- PathwayActivity_carnival_3_4.5$Pathway
+PathwayActivity_carnival_3_4.5$Pathway <- NULL
+PathwayActivity_carnival_3_4.5$...1 <- NULL
+
+progenylist_3_4.5 = assignPROGENyScores(progeny = t(PathwayActivity_carnival_3_4.5), 
+                                            progenyMembers = progenyMembers, 
+                                            id = "gene", 
+                                            access_idx = 1)
+
+# Subset8
+PathwayActivity_carnival_4.5_5 <- data.frame(PathwayActivity_CARNIVALinput.list$`Subset day 4.5 vs. day 5`, stringsAsFactors = F)
+
+rownames(PathwayActivity_carnival_4.5_5) <- PathwayActivity_carnival_4.5_5$Pathway
+PathwayActivity_carnival_4.5_5$Pathway <- NULL
+PathwayActivity_carnival_4.5_5$...1 <- NULL
+
+progenylist_4_4.5 = assignPROGENyScores(progeny = t(PathwayActivity_carnival_4.5_5), 
+                                            progenyMembers = progenyMembers, 
+                                            id = "gene", 
+                                            access_idx = 1)
+
+# Subset9
+PathwayActivity_carnival_5_6 <- data.frame(PathwayActivity_CARNIVALinput.list$`Subset day 5 vs 6`, stringsAsFactors = F)
+
+rownames(PathwayActivity_carnival_5_6) <- PathwayActivity_carnival_5_6$Pathway
+PathwayActivity_carnival_5_6$Pathway <- NULL
+PathwayActivity_carnival_5_6$...1 <- NULL
+
+progenylist_5_6 = assignPROGENyScores(progeny = t(PathwayActivity_carnival_5_6), 
+                                            progenyMembers = progenyMembers, 
+                                            id = "gene", 
+                                            access_idx = 1)
+
+```
+
+## Running carnival
+
+CARNIVAL has the ability to determine the causal link between TF activty and the 'pertubed'/'differentiated' nodes. The current version of CARNIVAL, v1.0.0, there are 3 main inputs that need to be provided:
+
+* _measObj_: TF activities from DoRothEA
+* _inputObj_: The 'perturbed'/'differentiated' nodes that CARNIVAL needs to connect with the TF activities
+
+There are a variety of possibilities to connect these nodes:
+
++ Give a name to and sign specific to the selected nodes
++ Give only a name to the selected node so the alogrithm will select the sign that represents the best fit of the model
++ Give NULL as a value to each of the nodes will create a 'pertubation' node, which will assess both signs for all 'initial' nodes given by _netObj_.
+
+* _netObj_: The network/map that has the ability to connect the TF activites from _measObj_ with the pertubed nodes _inputObj_
+
+A fourth object _weightObj_ can be created as well, but this is not necessary. It will aid the program in solving the optimal solution quicker by assigning values ranged from -1 to 1 for a set of nodes within the network.
+
+For these initial analyses CARNIVAL will be allowed to select the signs that will best fit the nodes in the model (option 2). The weight object will then represent the PROGENy scores assigned to the genes most represented in the calculated pathways.
+
+```{r}
+
+# get initial nodes  for inputObj
+# This particular piece of code is identical for each dataset it will give a general node map which we will specify to each subet by running CARNIVAL
+iniMTX = base::setdiff(sif$source, sif$target)
+iniciators = base::data.frame(base::matrix(data = NaN, nrow = 1, ncol = length(iniMTX)), stringsAsFactors = F)
+colnames(iniciators) = iniMTX
+
+```
+
+```{r}
+# This section will give the code for one of the respective subsets. However I did not execute that in this .rmd as this will cause errors
+#carnival_result_subset1 = runCARNIVAL( inputObj= iniciators,
+#                               measObj = tfList_subset1$t, 
+#                               netObj = sif, 
+#                               weightObj = progenylist_0_0.5$score, 
+#                               solverPath = "C:/Program Files/IBM/ILOG/CPLEX_Studio221/cplex/bin/x64_win64", 
+#                               solver = "cplex",
+#                               timelimit=7200,
+#                               mipGAP=0,
+#                               poolrelGAP=0 )
+
+
+
+```
+
+The carnival results will contain weighted_Sif objects, which contain the nodes and edges of the respective network I would like to visualize. As CARNIVAL is still being optimized by the developers, I chose to visualize these obtained networks with Cytoscape.
+
+Following the main visualization and filtering on weights in which all nodes were extracted with a weight below 1. It was of interest to combine all of these subsets so each interaction that showed a change over time could be captured through another visualization.
+
+```{r, fig.height=15, fig.width=10}
+# Load file which contains relevant interactions for all the subsets
+Combined_weighted_sif_useful <- read.csv("C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/analysis/Combined_weighted_sif_useful.csv")
+
+# Create a new column that contains a combination of node name 1 and 2
+Edge_weight<-Combined_weighted_sif_useful
+Edge_weight$Interaction<-paste(Combined_weighted_sif_useful$Node1, "-", Combined_weighted_sif_useful$Node2)
+# Remove columns we don't need
+library(tidyverse)
+Edge_weight<-select(Edge_weight, -Node1, -Sign, - Node2, -Weightsums, -X)
+# Interaction column to rownames
+Edge_weight<-column_to_rownames(Edge_weight, var = "Interaction")
+
+# create heatmap
+library(pheatmap)
+library(RColorBrewer)
+
+# Annotate row with interaction type inhibition or activation
+Annotation_sign<-Combined_weighted_sif_useful
+Annotation_sign$Interaction<-paste(Combined_weighted_sif_useful$Node1, "-", Combined_weighted_sif_useful$Node2)
+Annotation_sign<-select(Annotation_sign, -Node1, -Node2, -weight_subset1, -weight_subset2,-weight_subset3,-weight_subset4,-weight_subset5,-weight_subset6,-weight_subset7,-weight_subset8,-weight_subset9, -Weightsums, -X)
+Annotation_sign<-column_to_rownames(Annotation_sign,var = "Interaction")
+
+# Change annotation to something readable
+Annotation_sign[Annotation_sign == "-1"] <- "Inhibition"
+Annotation_sign[Annotation_sign == "1"] <- "Activation"
+
+# Annotation colors
+annot_colors=list(Interaction=c(Activation="#F0978D",Inhibition="#63D7DE"))
+
+# Call pheatmap
+pheatmap(Edge_weight, cluster_cols = FALSE, cluster_rows = TRUE, main = "Representation CARNIVAL interaction weights", color = brewer.pal(8, "Reds"), fontsize_row = 5, annotation_row = Annotation_sign, annotation_colors = annot_colors)
+
+```
+# Enrichment analysis
+
+Now we have an overview of which interactions are crucial in this differentiation trajectory it is of interest to interpret the meaning of those interactions. Therefore a GO-enrichment analysis will be performed using the PianoR package.
+
+```{r}
+# Load libraries
+library(readr)
+library(piano)
+library(dplyr)
+library(ggplot2)
+library(tibble)
+library(tidyr)
+library(dplyr)
+library(scales)
+library(plyr)
+library(GSEABase)
+library(network)
+library(reshape2)
+library(cowplot)
+library(pheatmap)
+library(ggraph)
+library(tidygraph)
+
+# Support function
+#'\code{gmt_to_csv}
+#'
+#'This function is designed to convert a gmt file into a two column dataframe where first column correspond to omic features and second column correspond to associated terms.
+#'
+#'@param gmtfile a full path name of the gmt file to be converted
+#'@param outfile an optional output file name. If none is provided, the function will simply return a dataframe.
+#'If outfile is provided with a full length path name file, the dataframe will be written as a csv file to the path provided.
+#'@return a two column dataframe where first column correspond to omic features and second column correspond to associated terms.
+gmt_to_csv <- function(gmtfile, fast = T)
+{
+  if(fast)
+  {
+    genesets = GSEABase::getGmt(con = gmtfile)
+    genesets = unlist(genesets)
+    
+    gene_to_term =plyr::ldply(genesets,function(geneset){
+      temp <- geneIds(geneset)
+      temp2 <- setName(geneset)
+      temp3 <- as.data.frame(cbind(temp,rep(temp2,length(temp))))
+      
+    },.progress = plyr::progress_text())
+    names(gene_to_term) <- c("gene","term")
+    return(gene_to_term[complete.cases(gene_to_term),])
+  }
+  else
+  {
+    genesets = getGmt(con = gmtfile)
+    genesets = unlist(genesets)
+    
+    gene_to_term <- data.frame(NA,NA)
+    names(gene_to_term) <- c("gene","term")
+    for (geneset in genesets)
+    {
+      temp <- geneIds(geneset)
+      temp2 <- setName(geneset)
+      temp3 <- as.data.frame(cbind(temp,rep(temp2,length(temp))))
+      names(temp3) <- c("gene","term")
+      gene_to_term <- rbind(gene_to_term,temp3)
+    }
+    
+    return(gene_to_term[complete.cases(gene_to_term),])
+  }
+}
+```
+```{r}
+
+# Load pathways
+pathways = gmt_to_csv("C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/Tutorial_Saez_lab/Full tutorial/data/c2.cp.v7.1.symbols.gmt")
+
+# Extract nodes and background
+#nodes_carnival = extractCARNIVALnodes(carnival_result)
+# I already got the nodes previously they are added to the data folder
+# subset1
+nodes_subset_1 <- read_csv("C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/Carnival subset nodes/nodes_subset1.csv")
+nodes_subset_1=nodes_subset_1[ ,-1] 
+# subset2
+nodes_subset_2 <- read_csv("C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/Carnival subset nodes/nodes_subset2.csv")
+nodes_subset_2=nodes_subset_2[ ,-1] 
+# Subset3
+nodes_subset_3 <- read_csv("C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/Carnival subset nodes/nodes_subset3.csv")
+nodes_subset_3=nodes_subset_2[ ,-1] 
+# Subset4
+nodes_subset_4 <- read_csv("C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/Carnival subset nodes/nodes_subset4.csv")
+nodes_subset_4=nodes_subset_4[ ,-1] 
+# Subset5
+nodes_subset_5 <- read_csv("C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/Carnival subset nodes/nodes_subset5.csv")
+nodes_subset_5=nodes_subset_5[ ,-1] 
+# Subset6
+nodes_subset_6 <- read_csv("C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/Carnival subset nodes/nodes_subset6.csv")
+nodes_subset_6=nodes_subset_6[ ,-1]
+# Subset7
+nodes_subset_7 <- read_csv("C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/Carnival subset nodes/nodes_subset7.csv")
+nodes_subset_7=nodes_subset_7[ ,-1] 
+# Subset8
+nodes_subset_8 <- read_csv("C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/Carnival subset nodes/nodes_subset8.csv")
+nodes_subset_8=nodes_subset_8[ ,-1] 
+# Subset9
+nodes_subset_9 <- read_csv("C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/Carnival subset nodes/nodes_subset9.csv")
+nodes_subset_9=nodes_subset_9[ ,-1] 
+
+# Make dataframe combining all subsets
+nodes_carnival_allsets<-merge(nodes_subset_1, nodes_subset_2)
+nodes_carnival_allsets<-merge(nodes_carnival_allsets, nodes_subset_3)
+nodes_carnival_allsets<-merge(nodes_carnival_allsets, nodes_subset_4)
+nodes_carnival_allsets<-merge(nodes_carnival_allsets, nodes_subset_5)
+nodes_carnival_allsets<-merge(nodes_carnival_allsets, nodes_subset_6)
+nodes_carnival_allsets<-merge(nodes_carnival_allsets, nodes_subset_7)
+nodes_carnival_allsets<-merge(nodes_carnival_allsets, nodes_subset_8)
+nodes_carnival_allsets<-merge(nodes_carnival_allsets, nodes_subset_9)
+
+# Run GSA hyper Geometric test
+sig_pathways <- runGSAhyper(genes = nodes_carnival_allsets$sucesses, 
+    gsc = loadGSC(pathways))
+sig_pathways_df <- as.data.frame(sig_pathways$resTab)  %>% 
+  tibble::rownames_to_column(var = "pathway") 
+
+```
+```{r, fig.height=10}
+
+#data for plotting
+PathwaysSelect <- sig_pathways_df %>%
+    dplyr::select(pathway, `p-value`, `Adjusted p-value`) %>%
+    dplyr::filter(`Adjusted p-value` <= 0.001) %>%
+    dplyr::rename(pvalue = `p-value`, AdjPvalu = `Adjusted p-value`) %>% 
+    dplyr::mutate(pathway = as.factor(pathway))
+
+PathwaysSelect <- data.frame(t(apply(PathwaysSelect, 1, function(r){
+  aux = unlist(strsplit( sub("_",";", r["pathway"]), ";" ))
+  r["pathway"] = gsub("_", " ", aux[2])
+  return(c(r, "source" = aux[1]))
+})))
+
+colnames(PathwaysSelect) = c("pathway", "pvalue", "AdjPvalu", "source")
+PathwaysSelect$AdjPvalu = as.numeric(PathwaysSelect$AdjPvalu)
+
+ggdata = PathwaysSelect %>% 
+    dplyr::filter(AdjPvalu <= 0.05) %>% 
+    dplyr::group_by(source) %>% 
+    dplyr::arrange(AdjPvalu) %>%
+    dplyr::slice(1:5)
+
+  
+# Visualize top results
+ggplot(ggdata, aes(y = reorder(pathway, AdjPvalu), x = -log10(AdjPvalu)), color = source) + 
+        geom_bar(stat = "identity", fill = "#00BFC4") +
+        facet_grid(source ~ ., scales="free_y") +
+        scale_x_continuous(
+                         expand = c(0.01, 0.01),
+                         limits = c(0, ceiling(max(-log10(PathwaysSelect$AdjPvalu)))),
+                         breaks = seq(floor(min(-log10(PathwaysSelect$AdjPvalu))), ceiling(max(-log10(PathwaysSelect$AdjPvalu))), 1),
+                         labels = math_format(10^-.x)
+                         ) +
+        annotation_logticks(sides = "bt") +
+        theme_bw() + theme(axis.text.x = element_text(angle = 90))+ ggtitle("Significantly active pathways during keratinocyte differentiation")
+        theme(axis.title = element_text(face = "bold", size = 12),
+              axis.text.y = element_text(size = 6)) +
+        ylab("")
+
+```
+In addition to this enrichment analysis I would also like to see if I get similar results using clusterprofiler.
+
+```{r}
+# Start prepping for GO-analysis
+# create genes string
+Gene_String<- nodes_carnival_allsets$sucesses
+
+# Install package that keeps our database
+#if (!require("BiocManager", quietly = TRUE))
+#    install.packages("BiocManager")
+
+#BiocManager::install("org.Hs.eg.db")
+
+# load library
+library(org.Hs.eg.db)
+library(clusterProfiler)
+
+ggo <- groupGO(gene     = Gene_String,
+               OrgDb    = org.Hs.eg.db,
+               keyType  = "SYMBOL",
+               ont      = "CC",
+               level    = 3,
+               readable = FALSE)
+
+head(ggo)
+
+#Any gene ID type that is supported in OrgDb can be directly used in GO analyses. Users need to specify the keyType parameter to specify the input gene ID type. # Keep in mind this is not significant!!! i have forced a GO analysis to get insight into what these genes mean
+ego <- enrichGO(gene          = Gene_String,
+                
+                OrgDb         = org.Hs.eg.db,
+                keyType       = "SYMBOL", 
+                ont           = "CC",
+                pAdjustMethod = "BH",
+                pvalueCutoff  = 0.05,
+                qvalueCutoff  = 0.2,
+        readable      = FALSE)
+head(ego)
+
+# Variety of ways to visualize
+# barplot
+barplot(ego)
+# dotplot
+dotplot(ego)
+#Heat plot showing the enriched GO terms on the y-axis and the genes on the x-axis. Genes with the associated GO term are highlighted.
+heatplot(ego)
+# goplot shows the gene ontology graph with the enriched GO terms highlighted.
+goplot(ego)
+```
+
+
+
+# References
+
+1.	Liu A, Trairatphisan P, Gjerga E, Didangelos A, Barratt J, Saez-Rodriguez J. From expression footprints to causal pathways: contextualizing large signaling networks with CARNIVAL. NPJ systems biology and applications. 2019;5(1):40.
+
+2. Kim DS, Risca VI, Reynolds DL, Chappell J, Rubin AJ, Jung N, et al. The dynamic, combinatorial cis-regulatory lexicon of epidermal differentiation. Nature genetics. 2021;53(11):1564-76.

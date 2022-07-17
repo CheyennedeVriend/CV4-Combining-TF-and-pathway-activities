@@ -1,0 +1,2547 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="C.deVriend" />
+
+
+<title>Carnival_subsets_khavari_final</title>
+
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">CARNIVAL</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Carnival_subsets_khavari_final</h1>
+<h4 class="author">C.deVriend</h4>
+<h4 class="date">15-6-2022</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-06-15
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 5 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 2
+</p>
+<p>
+<strong>Knit directory:</strong> <code>CARNIVAL/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version 1.7.0). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The R Markdown is untracked by Git. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20220504code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20220504)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20220504code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20220504)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongabsolute"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>File paths:</strong> absolute </a>
+</p>
+</div>
+<div id="strongFilepathsstrongabsolute" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Using absolute paths to the files within your workflowr project makes it difficult for you and others to run your code on a different machine. Change the absolute path(s) below to the suggested relative path(s) to make your code more reproducible.
+</p>
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th style="text-align:left;">
+absolute
+</th>
+<th style="text-align:left;">
+relative
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL
+</td>
+<td style="text-align:left;">
+.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/DoRothEA data/TFactivity_CARNIVALinput_0_0.5.csv
+</td>
+<td style="text-align:left;">
+data/DoRothEA data/TFactivity_CARNIVALinput_0_0.5.csv
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/DoRothEA data/TFactivity_CARNIVALinput_0.5_1.csv
+</td>
+<td style="text-align:left;">
+data/DoRothEA data/TFactivity_CARNIVALinput_0.5_1.csv
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/DoRothEA data/TFactivity_CARNIVALinput_1_1.5.csv
+</td>
+<td style="text-align:left;">
+data/DoRothEA data/TFactivity_CARNIVALinput_1_1.5.csv
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/DoRothEA data/TFactivity_CARNIVALinput_1.5_2.csv
+</td>
+<td style="text-align:left;">
+data/DoRothEA data/TFactivity_CARNIVALinput_1.5_2.csv
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/DoRothEA data/TFactivity_CARNIVALinput_2_2.5.csv
+</td>
+<td style="text-align:left;">
+data/DoRothEA data/TFactivity_CARNIVALinput_2_2.5.csv
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/DoRothEA data/TFactivity_CARNIVALinput_2.5_3.csv
+</td>
+<td style="text-align:left;">
+data/DoRothEA data/TFactivity_CARNIVALinput_2.5_3.csv
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/DoRothEA data/TFactivity_CARNIVALinput_3_4.5.csv
+</td>
+<td style="text-align:left;">
+data/DoRothEA data/TFactivity_CARNIVALinput_3_4.5.csv
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/DoRothEA data/TFactivity_CARNIVALinput_4.5_5.csv
+</td>
+<td style="text-align:left;">
+data/DoRothEA data/TFactivity_CARNIVALinput_4.5_5.csv
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/DoRothEA data/TFactivity_CARNIVALinput_5_6.csv
+</td>
+<td style="text-align:left;">
+data/DoRothEA data/TFactivity_CARNIVALinput_5_6.csv
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/PROGENy data/PathwayActivity_CARNIVALinput_0_0.5.csv
+</td>
+<td style="text-align:left;">
+data/PROGENy data/PathwayActivity_CARNIVALinput_0_0.5.csv
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/PROGENy data/PathwayActivity_CARNIVALinput_0.5_1.csv
+</td>
+<td style="text-align:left;">
+data/PROGENy data/PathwayActivity_CARNIVALinput_0.5_1.csv
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/PROGENy data/PathwayActivity_CARNIVALinput_1_1.5.csv
+</td>
+<td style="text-align:left;">
+data/PROGENy data/PathwayActivity_CARNIVALinput_1_1.5.csv
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/PROGENy data/PathwayActivity_CARNIVALinput_1.5_2.csv
+</td>
+<td style="text-align:left;">
+data/PROGENy data/PathwayActivity_CARNIVALinput_1.5_2.csv
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/PROGENy data/PathwayActivity_CARNIVALinput_2_2.5.csv
+</td>
+<td style="text-align:left;">
+data/PROGENy data/PathwayActivity_CARNIVALinput_2_2.5.csv
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/PROGENy data/PathwayActivity_CARNIVALinput_2.5_3.csv
+</td>
+<td style="text-align:left;">
+data/PROGENy data/PathwayActivity_CARNIVALinput_2.5_3.csv
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/PROGENy data/PathwayActivity_CARNIVALinput_3_4.5.csv
+</td>
+<td style="text-align:left;">
+data/PROGENy data/PathwayActivity_CARNIVALinput_3_4.5.csv
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/PROGENy data/PathwayActivity_CARNIVALinput_4.5_5.csv
+</td>
+<td style="text-align:left;">
+data/PROGENy data/PathwayActivity_CARNIVALinput_4.5_5.csv
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/PROGENy data/PathwayActivity_CARNIVALinput_5_6.csv
+</td>
+<td style="text-align:left;">
+data/PROGENy data/PathwayActivity_CARNIVALinput_5_6.csv
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/analysis/Combined_weighted_sif_useful.csv
+</td>
+<td style="text-align:left;">
+analysis/Combined_weighted_sif_useful.csv
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/Carnival subset nodes/nodes_subset1.csv
+</td>
+<td style="text-align:left;">
+data/Carnival subset nodes/nodes_subset1.csv
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/Carnival subset nodes/nodes_subset2.csv
+</td>
+<td style="text-align:left;">
+data/Carnival subset nodes/nodes_subset2.csv
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/Carnival subset nodes/nodes_subset3.csv
+</td>
+<td style="text-align:left;">
+data/Carnival subset nodes/nodes_subset3.csv
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/Carnival subset nodes/nodes_subset4.csv
+</td>
+<td style="text-align:left;">
+data/Carnival subset nodes/nodes_subset4.csv
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/Carnival subset nodes/nodes_subset5.csv
+</td>
+<td style="text-align:left;">
+data/Carnival subset nodes/nodes_subset5.csv
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/Carnival subset nodes/nodes_subset6.csv
+</td>
+<td style="text-align:left;">
+data/Carnival subset nodes/nodes_subset6.csv
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/Carnival subset nodes/nodes_subset7.csv
+</td>
+<td style="text-align:left;">
+data/Carnival subset nodes/nodes_subset7.csv
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/Carnival subset nodes/nodes_subset8.csv
+</td>
+<td style="text-align:left;">
+data/Carnival subset nodes/nodes_subset8.csv
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/Carnival subset nodes/nodes_subset9.csv
+</td>
+<td style="text-align:left;">
+data/Carnival subset nodes/nodes_subset9.csv
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong729e340"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> 729e340 </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrong729e340" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version 729e340. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    analysis/figure/
+
+Untracked files:
+    Untracked:  .here
+    Untracked:  CARNIVAL/
+    Untracked:  analysis/Carnival_subsets_khavari.Rmd
+    Untracked:  analysis/Carnival_subsets_khavari_final.Rmd
+    Untracked:  analysis/Combined_weighted_sif_useful.csv
+    Untracked:  analysis/NodesAttributes_subset1.csv
+    Untracked:  analysis/Weighted_isf_Subset1
+    Untracked:  analysis/Weighted_sif_Subset1.csv
+    Untracked:  analysis/Weighted_sif_Subset1_weights80.csv
+    Untracked:  analysis/Weighted_sif_Subset2.csv
+    Untracked:  analysis/Weighted_sif_Subset2_weights80.csv
+    Untracked:  analysis/Weighted_sif_Subset3.csv
+    Untracked:  analysis/Weighted_sif_Subset3_weights80.csv
+    Untracked:  analysis/Weighted_sif_Subset4.csv
+    Untracked:  analysis/Weighted_sif_Subset4_weights80.csv
+    Untracked:  analysis/Weighted_sif_Subset5.csv
+    Untracked:  analysis/Weighted_sif_Subset5_weights80.csv
+    Untracked:  analysis/Weighted_sif_Subset6.csv
+    Untracked:  analysis/Weighted_sif_Subset6_Weights80.csv
+    Untracked:  analysis/Weighted_sif_Subset7.csv
+    Untracked:  analysis/Weighted_sif_Subset7_weights 80.csv
+    Untracked:  analysis/Weighted_sif_Subset8.csv
+    Untracked:  analysis/Weighted_sif_Subset8_weights80.csv
+    Untracked:  analysis/Weighted_sif_Subset9.csv
+    Untracked:  analysis/Weighted_sif_Subset9_weights80.csv
+    Untracked:  analysis/carnival_result_subset1.rds
+    Untracked:  analysis/carnival_result_subset2.rds
+    Untracked:  analysis/cplex.log
+    Untracked:  analysis/cplexCommand_t00_11_31d28_05_2022n37.txt
+    Untracked:  analysis/cplexCommand_t00_18_13d28_05_2022n1.txt
+    Untracked:  analysis/cplexCommand_t11_25_12d28_05_2022n40.txt
+    Untracked:  analysis/cplexCommand_t11_31_39d28_05_2022n18.txt
+    Untracked:  analysis/cplexCommand_t11_36_06d28_05_2022n43.txt
+    Untracked:  analysis/cplexCommand_t11_41_14d28_05_2022n24.txt
+    Untracked:  analysis/cplexCommand_t13_57_25d27_05_2022n25.txt
+    Untracked:  analysis/cplexCommand_t14_07_21d27_05_2022n53.txt
+    Untracked:  analysis/cplexCommand_t14_14_24d27_05_2022n91.txt
+    Untracked:  analysis/cplexCommand_t16_48_29d26_05_2022n1.txt
+    Untracked:  analysis/cplexCommand_t16_59_12d26_05_2022n92.txt
+    Untracked:  analysis/cplexCommand_t17_58_54d27_05_2022n68.txt
+    Untracked:  analysis/cplexCommand_t18_02_44d28_05_2022n39.txt
+    Untracked:  analysis/cplexCommand_t18_03_37d27_05_2022n2.txt
+    Untracked:  analysis/cplexCommand_t20_07_31d27_05_2022n49.txt
+    Untracked:  analysis/cplexCommand_t20_13_33d27_05_2022n85.txt
+    Untracked:  analysis/cplexCommand_t20_17_59d27_05_2022n10.txt
+    Untracked:  analysis/cplexCommand_t20_23_10d27_05_2022n95.txt
+    Untracked:  analysis/cplexCommand_t21_51_11d27_05_2022n65.txt
+    Untracked:  analysis/cplexCommand_t21_53_47d27_05_2022n33.txt
+    Untracked:  analysis/cplexCommand_t22_06_25d27_05_2022n54.txt
+    Untracked:  analysis/lpFile_t00_11_31d28_05_2022n37.lp
+    Untracked:  analysis/lpFile_t00_18_13d28_05_2022n1.lp
+    Untracked:  analysis/lpFile_t11_25_12d28_05_2022n40.lp
+    Untracked:  analysis/lpFile_t11_31_39d28_05_2022n18.lp
+    Untracked:  analysis/lpFile_t11_36_06d28_05_2022n43.lp
+    Untracked:  analysis/lpFile_t11_41_14d28_05_2022n24.lp
+    Untracked:  analysis/lpFile_t13_57_25d27_05_2022n25.lp
+    Untracked:  analysis/lpFile_t14_07_21d27_05_2022n53.lp
+    Untracked:  analysis/lpFile_t14_14_24d27_05_2022n91.lp
+    Untracked:  analysis/lpFile_t16_48_29d26_05_2022n1.lp
+    Untracked:  analysis/lpFile_t16_59_12d26_05_2022n92.lp
+    Untracked:  analysis/lpFile_t17_58_54d27_05_2022n68.lp
+    Untracked:  analysis/lpFile_t18_02_44d28_05_2022n39.lp
+    Untracked:  analysis/lpFile_t18_03_37d27_05_2022n2.lp
+    Untracked:  analysis/lpFile_t20_07_31d27_05_2022n49.lp
+    Untracked:  analysis/lpFile_t20_13_33d27_05_2022n85.lp
+    Untracked:  analysis/lpFile_t20_17_59d27_05_2022n10.lp
+    Untracked:  analysis/lpFile_t20_23_10d27_05_2022n95.lp
+    Untracked:  analysis/lpFile_t21_51_11d27_05_2022n65.lp
+    Untracked:  analysis/lpFile_t21_53_47d27_05_2022n33.lp
+    Untracked:  analysis/lpFile_t22_06_25d27_05_2022n54.lp
+    Untracked:  analysis/omnipath_carnival.tsv
+    Untracked:  analysis/omnipathr-log/
+    Untracked:  analysis/parsedData_t00_11_31d28_05_2022n37.RData
+    Untracked:  analysis/parsedData_t00_18_13d28_05_2022n1.RData
+    Untracked:  analysis/parsedData_t11_25_12d28_05_2022n40.RData
+    Untracked:  analysis/parsedData_t11_31_39d28_05_2022n18.RData
+    Untracked:  analysis/parsedData_t11_36_06d28_05_2022n43.RData
+    Untracked:  analysis/parsedData_t11_41_14d28_05_2022n24.RData
+    Untracked:  analysis/parsedData_t13_57_25d27_05_2022n25.RData
+    Untracked:  analysis/parsedData_t14_07_21d27_05_2022n53.RData
+    Untracked:  analysis/parsedData_t14_14_24d27_05_2022n91.RData
+    Untracked:  analysis/parsedData_t16_48_29d26_05_2022n1.RData
+    Untracked:  analysis/parsedData_t16_59_12d26_05_2022n92.RData
+    Untracked:  analysis/parsedData_t17_58_54d27_05_2022n68.RData
+    Untracked:  analysis/parsedData_t18_02_44d28_05_2022n39.RData
+    Untracked:  analysis/parsedData_t18_03_37d27_05_2022n2.RData
+    Untracked:  analysis/parsedData_t20_07_31d27_05_2022n49.RData
+    Untracked:  analysis/parsedData_t20_13_33d27_05_2022n85.RData
+    Untracked:  analysis/parsedData_t20_17_59d27_05_2022n10.RData
+    Untracked:  analysis/parsedData_t20_23_10d27_05_2022n95.RData
+    Untracked:  analysis/parsedData_t21_51_11d27_05_2022n65.RData
+    Untracked:  analysis/parsedData_t21_53_47d27_05_2022n33.RData
+    Untracked:  analysis/parsedData_t22_06_25d27_05_2022n54.RData
+    Untracked:  analysis/result_t13_57_25d27_05_2022n25.txt
+    Untracked:  analysis/result_t20_23_10d27_05_2022n95.txt
+    Untracked:  analysis/result_t21_51_11d27_05_2022n65.txt
+    Untracked:  data/Carnival subset nodes/
+    Untracked:  data/DoRothEA data/
+    Untracked:  data/PROGENy data/
+    Untracked:  environment.RData
+    Untracked:  omnipath_carnival.tsv
+    Untracked:  omnipathr-log/
+    Untracked:  output/Cytoscape images/
+    Untracked:  output/Interaction_weights_all_subsets_heatmap.png
+    Untracked:  output/Overrepresentation_result_node_Successes_allsubsets.png
+
+Unstaged changes:
+    Modified:   data/README.md
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+There are no past versions. Publish this analysis with <code>wflow_publish()</code> to start tracking its development.
+</p>
+<hr>
+</div>
+</div>
+</div>
+<style type="text/css">
+pre {  max-height: 300px;
+       overflow-y: auto;
+}
+pre[class] {  max-height: 100px;}
+</style>
+<pre class="r"><code># First we will start working with workflowr
+#install.packages(&quot;workflowr&quot;)
+#library(workflowr)
+#wflow_git_config(user.name = &quot;cheyennedevriend&quot;,user.email = cheyenne.devriend@ru.nl&quot;)
+#wflow_start(&quot;/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL&quot;, existing = TRUE)
+#set_here(path = &quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL&quot;)</code></pre>
+<div id="network-reconstruction-with-carnival" class="section level1">
+<h1>Network reconstruction with Carnival</h1>
+<p>We have the option to look up each separate gene in literature. However, this will take a lot of time for all the comparisons. Therefore, the CAusal Reasoning pipeline for Network identification using Integer VALue programming (CARNIVAL) may be a valuable tool. The aim is to identify a subset of interactions from a prior knowledge network that represents potential regulated pathways. Consequently, it can aid us to identify the upstream regulatory signalling pathways from the downstream gene expression (1).</p>
+<div id="unravelling-keratinocyte-differentiation-networks" class="section level2">
+<h2>Unravelling keratinocyte differentiation networks</h2>
+<p>In this particular analysis we will asses each of the subsets created from the Khavari P. et al., (2020) dataset (2).</p>
+<p>The aim of CARNIVAL is to identify a subset of interactions from a prior knowledge network, a network that represents potential regulated pathways linking known or potential targets related to keratinoycte differentiation, to active transcription factors derived from GEX data.</p>
+<pre class="r"><code># Load libraries
+library(progeny)
+library(dorothea)
+library(CARNIVAL)
+library(OmnipathR)
+library(readr)
+library(tibble)
+library(tidyr)
+library(dplyr)</code></pre>
+<pre><code>
+Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>The following objects are masked from &#39;package:stats&#39;:
+
+    filter, lag</code></pre>
+<pre><code>The following objects are masked from &#39;package:base&#39;:
+
+    intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>library(visNetwork)
+
+library(ggplot2)
+library(pheatmap)
+
+
+## For the volcano plot 
+library(ggrepel)</code></pre>
+<pre class="r"><code>#&#39;\code{generateTFList}
+#&#39;
+#&#39; Creating regulon list similar to vipper from an interaction data-frame
+#&#39; 
+#&#39; @param df dataframe with TF activities
+#&#39; @param top number of top regulated TF&#39;s (default set to top = 50)
+#&#39; @param access_idx index of the sample to consider (default set to 
+#&#39; access_idx = 1)
+#&#39; 
+#&#39;
+#&#39;Enio Gjerga, 2020
+
+generateTFList &lt;- function(df = df, top = 50, access_idx = 1){
+  
+  if(top==&quot;all&quot;){
+    top &lt;- nrow(df)
+  }
+  
+  if(top &gt; nrow(df)){
+    warning(&quot;Number of to TF&#39;s inserted exceeds the number of actual TF&#39;s in the
+            data frame. All the TF&#39;s will be considered.&quot;)
+    top &lt;- nrow(df)
+  }
+  
+  ctrl &lt;- intersect(x = access_idx, y = 1:ncol(df))
+  if(length(ctrl)==0){
+    stop(&quot;The indeces you inserted do not correspond to 
+              the number of columns/samples&quot;)
+  }
+  
+  returnList &lt;- list()
+  
+  for(ii in 1:length(ctrl)){
+    
+    tfThresh &lt;- sort(x = abs(df[, ctrl[ii]]), decreasing = TRUE)[top]
+    temp &lt;- which(abs(df[, ctrl[ii]])&gt;=tfThresh)
+    
+    currDF &lt;- matrix(data = , nrow = 1, ncol = top)
+    colnames(currDF) &lt;- rownames(df)[1:top]
+    currDF[1, ] &lt;- df[temp[1:top], ctrl[ii]]
+    currDF &lt;- as.data.frame(currDF)
+    
+    returnList[[length(returnList)+1]] &lt;- currDF
+    
+  }
+  
+  names(returnList) &lt;- colnames(df)[ctrl]
+  
+  return(returnList)
+  
+}
+
+
+#&#39;\code{assignPROGENyScores}
+#&#39;
+#&#39;@param progeny contains the progeny scores as obtained from \code{runPROGENy}.
+#&#39;@param progenyMembers contains the list of members for each PROGENy pathway.
+#&#39;@param id contains the members identifiers (default: gene).
+#&#39;@param access_idx index of the sample to consider (default set to 
+#&#39;access_idx = 1)
+#&#39;
+#&#39;@return This function is used to account for the PROGENy scores in the 
+#&#39;objective function. It creates a list object with progeny scores for a 
+#&#39;selected set of samples (by default for all of them)
+#&#39;
+#&#39;@export
+#&#39;
+#&#39;Enio Gjerga &amp; Panuwat Trairatphisan, 2020
+
+assignPROGENyScores &lt;- function(progeny = progeny, 
+                                progenyMembers = progenyMembers, 
+                                id = &quot;gene&quot;, access_idx = 1){
+  
+  if(id==&quot;uniprot&quot;){
+    
+    idx &lt;- which(names(progenyMembers)==&quot;uniprot&quot;)
+    progenyMembers &lt;- progenyMembers[[idx]]
+    
+  } else {
+    
+    idx &lt;- which(names(progenyMembers)==&quot;gene&quot;)
+    progenyMembers &lt;- progenyMembers[[idx]]
+    
+  }
+  
+  members &lt;- matrix(data = , nrow = 1, ncol = 2)
+  pathways &lt;- colnames(progeny)
+  
+  ctrl &lt;- intersect(x = access_idx, y = 1:nrow(progeny))
+  if(length(ctrl)==0){
+    stop(&quot;The indeces you inserted do not correspond to 
+              the number of rows/samples&quot;)
+  }
+  
+  for(ii in 1:length(pathways)){
+    
+    mm &lt;- progenyMembers[[which(names(progenyMembers)==pathways[ii])]]
+    for(jj in 1:length(mm)){
+      
+      members &lt;- rbind(members, c(pathways[ii], mm[jj]))
+      
+    }
+    
+  }
+  
+  members &lt;- members[-1, ]
+  
+  scores &lt;- matrix(data = , nrow = nrow(progeny), ncol = nrow(members))
+  colnames(scores) &lt;- members[, 2]
+  rownames(scores) &lt;- rownames(progeny)
+  
+  members &lt;- unique(members)
+  
+  for(i in 1:ncol(scores)){
+    
+    for(j in 1:nrow(scores)){
+      
+      scores[j, i] &lt;- 
+        as.numeric(
+          progeny[j, members[which(members[, 2]==colnames(scores)[i]), 1]])
+      
+    }
+    
+  }
+  
+  pxList &lt;- list()
+  for(ii in 1:length(access_idx)){
+    pxList[[length(pxList)+1]] &lt;- 
+      as.data.frame(t(as.matrix(scores[access_idx[ii], ])))
+  }
+  
+  names(pxList) &lt;- rownames(progeny)[ctrl]
+  
+  return(pxList)
+
+  
+}</code></pre>
+<pre class="r"><code># Load data
+here()</code></pre>
+<pre><code>[1] &quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL&quot;</code></pre>
+<pre class="r"><code># Data from TF analysis with Dorothea
+TFactivity_CARNIVALinput_0_0_5 &lt;- read_csv(&quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/DoRothEA data/TFactivity_CARNIVALinput_0_0.5.csv&quot;)</code></pre>
+<pre><code>New names:
+Rows: 260 Columns: 3
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+(1): TF dbl (2): ...1, t
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...1`</code></pre>
+<pre class="r"><code>TFactivity_CARNIVALinput_0_5_1 &lt;- read_csv(&quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/DoRothEA data/TFactivity_CARNIVALinput_0.5_1.csv&quot;)</code></pre>
+<pre><code>New names:
+Rows: 253 Columns: 3
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+(1): TF dbl (2): ...1, t
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...1`</code></pre>
+<pre class="r"><code>TFactivity_CARNIVALinput_1_1_5 &lt;- read_csv(&quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/DoRothEA data/TFactivity_CARNIVALinput_1_1.5.csv&quot;)</code></pre>
+<pre><code>New names:
+Rows: 260 Columns: 3
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+(1): TF dbl (2): ...1, t
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...1`</code></pre>
+<pre class="r"><code>TFactivity_CARNIVALinput_1_5_2 &lt;- read_csv(&quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/DoRothEA data/TFactivity_CARNIVALinput_1.5_2.csv&quot;)</code></pre>
+<pre><code>New names:
+Rows: 247 Columns: 3
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+(1): TF dbl (2): ...1, t
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...1`</code></pre>
+<pre class="r"><code>TFactivity_CARNIVALinput_2_2_5 &lt;- read_csv(&quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/DoRothEA data/TFactivity_CARNIVALinput_2_2.5.csv&quot;)</code></pre>
+<pre><code>New names:
+Rows: 256 Columns: 3
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+(1): TF dbl (2): ...1, t
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...1`</code></pre>
+<pre class="r"><code>TFactivity_CARNIVALinput_2_5_3 &lt;- read_csv(&quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/DoRothEA data/TFactivity_CARNIVALinput_2.5_3.csv&quot;)</code></pre>
+<pre><code>New names:
+Rows: 261 Columns: 3
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+(1): TF dbl (2): ...1, t
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...1`</code></pre>
+<pre class="r"><code>TFactivity_CARNIVALinput_3_4_5 &lt;- read_csv(&quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/DoRothEA data/TFactivity_CARNIVALinput_3_4.5.csv&quot;)</code></pre>
+<pre><code>New names:
+Rows: 259 Columns: 3
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+(1): TF dbl (2): ...1, t
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...1`</code></pre>
+<pre class="r"><code>TFactivity_CARNIVALinput_4_5_5 &lt;- read_csv(&quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/DoRothEA data/TFactivity_CARNIVALinput_4.5_5.csv&quot;)</code></pre>
+<pre><code>New names:
+Rows: 253 Columns: 3
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+(1): TF dbl (2): ...1, t
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...1`</code></pre>
+<pre class="r"><code>TFactivity_CARNIVALinput_5_6 &lt;- read_csv(&quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/DoRothEA data/TFactivity_CARNIVALinput_5_6.csv&quot;)</code></pre>
+<pre><code>New names:
+Rows: 257 Columns: 3
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+(1): TF dbl (2): ...1, t
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...1`</code></pre>
+<pre class="r"><code># Create list object
+TFactivity_CARNIVAL_input.list&lt;-list(TFactivity_CARNIVALinput_0_0_5,TFactivity_CARNIVALinput_0_5_1,TFactivity_CARNIVALinput_1_1_5,TFactivity_CARNIVALinput_1_5_2,TFactivity_CARNIVALinput_2_2_5,TFactivity_CARNIVALinput_2_5_3,TFactivity_CARNIVALinput_3_4_5,TFactivity_CARNIVALinput_4_5_5,TFactivity_CARNIVALinput_5_6)
+# Assign appropriate names per object
+names(TFactivity_CARNIVAL_input.list)&lt;-c(&#39;Subset day 0 vs. 0.5&#39;,&#39;Subset day 0.5 vs. 1&#39;,&#39;Subset day 1 vs. 1.5&#39;, &#39;Subset day 1.5 vs. 2&#39;, &#39;Subset day 2 vs. 2.5&#39;, &#39;Subset day 2.5 vs. day 3&#39;, &#39;Subset day 3 vs. day 4.5&#39;, &#39;Subset day 4.5 vs. day 5&#39;, &#39;Subset day 5 vs 6&#39;)
+
+# Data from Pathway analysis with Progeny
+PathwayActivity_CARNIVALinput_0_0_5 &lt;- read_csv(&quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/PROGENy data/PathwayActivity_CARNIVALinput_0_0.5.csv&quot;)</code></pre>
+<pre><code>New names:
+Rows: 14 Columns: 3
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+(1): Pathway dbl (2): ...1, score
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...1`</code></pre>
+<pre class="r"><code>PathwayActivity_CARNIVALinput_0_5_1 &lt;- read_csv(&quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/PROGENy data/PathwayActivity_CARNIVALinput_0.5_1.csv&quot;)</code></pre>
+<pre><code>New names:
+Rows: 14 Columns: 3
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+(1): Pathway dbl (2): ...1, score
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...1`</code></pre>
+<pre class="r"><code>PathwayActivity_CARNIVALinput_1_1_5 &lt;- read_csv(&quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/PROGENy data/PathwayActivity_CARNIVALinput_1_1.5.csv&quot;)</code></pre>
+<pre><code>New names:
+Rows: 14 Columns: 3
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+(1): Pathway dbl (2): ...1, score
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...1`</code></pre>
+<pre class="r"><code>PathwayActivity_CARNIVALinput_1_5_2 &lt;- read_csv(&quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/PROGENy data/PathwayActivity_CARNIVALinput_1.5_2.csv&quot;)</code></pre>
+<pre><code>New names:
+Rows: 14 Columns: 3
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+(1): Pathway dbl (2): ...1, score
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...1`</code></pre>
+<pre class="r"><code>PathwayActivity_CARNIVALinput_2_2_5 &lt;- read_csv(&quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/PROGENy data/PathwayActivity_CARNIVALinput_2_2.5.csv&quot;)</code></pre>
+<pre><code>New names:
+Rows: 14 Columns: 3
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+(1): Pathway dbl (2): ...1, score
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...1`</code></pre>
+<pre class="r"><code>PathwayActivity_CARNIVALinput_2_5_3 &lt;- read_csv(&quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/PROGENy data/PathwayActivity_CARNIVALinput_2.5_3.csv&quot;)</code></pre>
+<pre><code>New names:
+Rows: 14 Columns: 3
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+(1): Pathway dbl (2): ...1, score
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...1`</code></pre>
+<pre class="r"><code>PathwayActivity_CARNIVALinput_3_4_5 &lt;- read_csv(&quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/PROGENy data/PathwayActivity_CARNIVALinput_3_4.5.csv&quot;)</code></pre>
+<pre><code>New names:
+Rows: 14 Columns: 3
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+(1): Pathway dbl (2): ...1, score
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...1`</code></pre>
+<pre class="r"><code>PathwayActivity_CARNIVALinput_4_5_5 &lt;- read_csv(&quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/PROGENy data/PathwayActivity_CARNIVALinput_4.5_5.csv&quot;)</code></pre>
+<pre><code>New names:
+Rows: 14 Columns: 3
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+(1): Pathway dbl (2): ...1, score
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...1`</code></pre>
+<pre class="r"><code>PathwayActivity_CARNIVALinput_5_6 &lt;- read_csv(&quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/PROGENy data/PathwayActivity_CARNIVALinput_5_6.csv&quot;)</code></pre>
+<pre><code>New names:
+Rows: 14 Columns: 3
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+(1): Pathway dbl (2): ...1, score
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...1`</code></pre>
+<pre class="r"><code># Create list object
+PathwayActivity_CARNIVALinput.list&lt;-list(PathwayActivity_CARNIVALinput_0_0_5,PathwayActivity_CARNIVALinput_0_5_1,PathwayActivity_CARNIVALinput_1_1_5,PathwayActivity_CARNIVALinput_1_5_2,PathwayActivity_CARNIVALinput_2_2_5,PathwayActivity_CARNIVALinput_2_5_3,PathwayActivity_CARNIVALinput_3_4_5,PathwayActivity_CARNIVALinput_4_5_5,PathwayActivity_CARNIVALinput_5_6)
+# Assign appropriate names per object
+names(PathwayActivity_CARNIVALinput.list)&lt;-c(&#39;Subset day 0 vs. 0.5&#39;,&#39;Subset day 0.5 vs. 1&#39;,&#39;Subset day 1 vs. 1.5&#39;, &#39;Subset day 1.5 vs. 2&#39;, &#39;Subset day 2 vs. 2.5&#39;, &#39;Subset day 2.5 vs. day 3&#39;, &#39;Subset day 3 vs. day 4.5&#39;, &#39;Subset day 4.5 vs. day 5&#39;, &#39;Subset day 5 vs 6&#39;)</code></pre>
+</div>
+<div id="getting-the-scaffold-network-from-omnipath" class="section level2">
+<h2>Getting the scaffold network from Omnipath</h2>
+<p>In order to run CARNIVAL, it is a necessity to create a scaffold network that will function as a “map” to find the causal network of differentiation in the dataset subsets. Therefore, Omnipath will be employed as it has the ability to obtain signed and directed interactions from each of the available resources. To be more specific, CARNIVAL needs the information in a standard input/<em>sif</em> table format. This will lead to a map including a node/gene, possible interaction, second node/gene. In order to prepare the data accordingly the consensus columns of direction and signs will be used.</p>
+<p>The query will return either 0 or 1 as a logic status of a stimulated or inhibited reaction. Therefore, the output is reformulated to 1/-1 to indicate respective stimulation or inhibition. Then the option is to either keep the interactions that are consistent, or both alternatives (e.g. A1B;A-1B). In order to make sense of the enormous data pool, the choice has been made to only keep the consistent interactions.</p>
+<pre class="r"><code>omniR &lt;- import_Omnipath_Interactions()</code></pre>
+<pre><code>Warning: &#39;import_Omnipath_Interactions&#39; is deprecated.
+Use &#39;import_omnipath_interactions&#39; instead.
+See help(&quot;Deprecated&quot;)</code></pre>
+<pre class="r"><code># This can be directly copied from the tutorial from Saez lab
+# Signed and directed
+omnipath_sd&lt;-omniR %&gt;% dplyr::filter(consensus_direction == 1 &amp;
+                                (consensus_stimulation == 1 | 
+                                 consensus_inhibition == 1
+                                 )) 
+  
+# changing 0/1 criteria in consensus_stimulation/inhibition to -1/1
+omnipath_sd$consensus_stimulation[which( omnipath_sd$consensus_stimulation == 0)] = -1
+omnipath_sd$consensus_inhibition[which( omnipath_sd$consensus_inhibition == 1)] = -1
+omnipath_sd$consensus_inhibition[which( omnipath_sd$consensus_inhibition == 0)] = 1
+
+# check consistency on consensus sign and select only those in a SIF format
+sif &lt;- omnipath_sd[,c(&#39;source_genesymbol&#39;, &#39;consensus_stimulation&#39;, &#39;consensus_inhibition&#39;, &#39;target_genesymbol&#39;)] %&gt;%
+      dplyr::filter(consensus_stimulation==consensus_inhibition) %&gt;%
+      unique.data.frame()
+
+sif$consensus_stimulation &lt;- NULL
+colnames(sif) &lt;- c(&#39;source&#39;, &#39;interaction&#39;, &#39;target&#39;)
+
+# remove complexes
+sif$source &lt;- gsub(&quot;:&quot;, &quot;_&quot;, sif$source)
+sif$target &lt;- gsub(&quot;:&quot;, &quot;_&quot;, sif$target)
+
+#save SIF
+write_tsv(sif, &quot;omnipath_carnival.tsv&quot;)</code></pre>
+</div>
+<div id="transcription-factor-and-pathway-activities-for-carnival" class="section level2">
+<h2>Transcription factor and pathway activities for CARNIVAL</h2>
+<p>At this point the appropriate “interaction map” and data has been imported. Nevertheless, supplementary functions need to be employed as the formats from DoroThEA and PROGENy need to be converted to those appropriate vor CARNIVAL.</p>
+<pre class="r"><code># By hand spend a lot of time on loops but did not work
+# Subset 1
+tf_activities_carnival_0_0.5&lt;- data.frame(TFactivity_CARNIVAL_input.list$`Subset day 0 vs. 0.5`, stringsAsFactors = F)
+rownames(tf_activities_carnival_0_0.5) &lt;- TFactivity_CARNIVAL_input.list$`Subset day 0 vs. 0.5`$TF
+tf_activities_carnival_0_0.5$TF &lt;- NULL
+tf_activities_carnival_0_0.5$...1&lt;-NULL
+tfList_subset1 = generateTFList(tf_activities_carnival_0_0.5, top=50, access_idx = 1)
+
+# Subset2
+tf_activities_carnival_0.5_1&lt;- data.frame(TFactivity_CARNIVAL_input.list$`Subset day 0.5 vs. 1`, stringsAsFactors = F)
+rownames(tf_activities_carnival_0.5_1) &lt;- TFactivity_CARNIVAL_input.list$`Subset day 0.5 vs. 1`$TF
+tf_activities_carnival_0.5_1$TF &lt;- NULL
+tf_activities_carnival_0.5_1$...1&lt;-NULL
+tfList_subset2 = generateTFList(tf_activities_carnival_0.5_1, top=50, access_idx = 1)
+
+#Subset3
+tf_activities_carnival_1_1.5&lt;- data.frame(TFactivity_CARNIVAL_input.list$`Subset day 1 vs. 1.5`, stringsAsFactors = F)
+rownames(tf_activities_carnival_1_1.5) &lt;- TFactivity_CARNIVAL_input.list$`Subset day 1 vs. 1.5`$TF
+tf_activities_carnival_1_1.5$TF &lt;- NULL
+tf_activities_carnival_1_1.5$...1&lt;-NULL
+tfList_subset3 = generateTFList(tf_activities_carnival_1_1.5, top=50, access_idx = 1)
+
+#Subset4
+tf_activities_carnival_1.5_2&lt;- data.frame(TFactivity_CARNIVAL_input.list$`Subset day 1.5 vs. 2`, stringsAsFactors = F)
+rownames(tf_activities_carnival_1.5_2) &lt;- TFactivity_CARNIVAL_input.list$`Subset day 1.5 vs. 2`$TF
+tf_activities_carnival_1.5_2$TF &lt;- NULL
+tf_activities_carnival_1.5_2$...1&lt;-NULL
+tfList_subset4 = generateTFList(tf_activities_carnival_1.5_2, top=50, access_idx = 1)
+
+#Subset5
+tf_activities_carnival_2_2.5&lt;- data.frame(TFactivity_CARNIVAL_input.list$`Subset day 2 vs. 2.5`, stringsAsFactors = F)
+rownames(tf_activities_carnival_2_2.5) &lt;- TFactivity_CARNIVAL_input.list$`Subset day 2 vs. 2.5`$TF
+tf_activities_carnival_2_2.5$TF &lt;- NULL
+tf_activities_carnival_2_2.5$...1&lt;-NULL
+tfList_subset5 = generateTFList(tf_activities_carnival_2_2.5, top=50, access_idx = 1)
+
+#Subset6
+tf_activities_carnival_2.5_3&lt;- data.frame(TFactivity_CARNIVAL_input.list$`Subset day 2.5 vs. day 3`, stringsAsFactors = F)
+rownames(tf_activities_carnival_2.5_3) &lt;- TFactivity_CARNIVAL_input.list$`Subset day 2.5 vs. day 3`$TF
+tf_activities_carnival_2.5_3$TF &lt;- NULL
+tf_activities_carnival_2.5_3$...1&lt;-NULL
+tfList_subset6 = generateTFList(tf_activities_carnival_2.5_3, top=50, access_idx = 1)
+
+#Subset7
+tf_activities_carnival_3_4.5&lt;- data.frame(TFactivity_CARNIVAL_input.list$`Subset day 3 vs. day 4.5`, stringsAsFactors = F)
+rownames(tf_activities_carnival_3_4.5) &lt;- TFactivity_CARNIVAL_input.list$`Subset day 3 vs. day 4.5`$TF
+tf_activities_carnival_3_4.5$TF &lt;- NULL
+tf_activities_carnival_3_4.5$...1&lt;-NULL
+tfList_subset7 = generateTFList(tf_activities_carnival_3_4.5, top=50, access_idx = 1)
+
+#Subset8
+tf_activities_carnival_4.5_5&lt;- data.frame(TFactivity_CARNIVAL_input.list$`Subset day 4.5 vs. day 5`, stringsAsFactors = F)
+rownames(tf_activities_carnival_4.5_5) &lt;- TFactivity_CARNIVAL_input.list$`Subset day 4.5 vs. day 5`$TF
+tf_activities_carnival_4.5_5$TF &lt;- NULL
+tf_activities_carnival_4.5_5$...1&lt;-NULL
+tfList_subset8 = generateTFList(tf_activities_carnival_4.5_5, top=50, access_idx = 1)
+
+#Subset9
+tf_activities_carnival_5_6&lt;- data.frame(TFactivity_CARNIVAL_input.list$`Subset day 5 vs 6`, stringsAsFactors = F)
+rownames(tf_activities_carnival_5_6) &lt;- TFactivity_CARNIVAL_input.list$`Subset day 5 vs 6`$TF
+tf_activities_carnival_5_6$TF &lt;- NULL
+tf_activities_carnival_5_6$...1&lt;-NULL
+tfList_subset9 = generateTFList(tf_activities_carnival_5_6, top=50, access_idx = 1)</code></pre>
+<pre class="r"><code># PROGENy for CARNIVAL
+#load(file = system.file(&quot;progenyMembers.RData&quot;,package=&quot;CARNIVAL&quot;)) # standard command from Saez lab tutorial
+load(&quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/Tutorial_Saez_lab/Full tutorial/data/progenyMembers.RData&quot;)
+
+# Now we start with the data
+# Subset1
+PathwayActivity_carnival_0_0.5 &lt;- data.frame(PathwayActivity_CARNIVALinput.list$`Subset day 0 vs. 0.5`, stringsAsFactors = F)
+
+rownames(PathwayActivity_carnival_0_0.5) &lt;- PathwayActivity_carnival_0_0.5$Pathway
+PathwayActivity_carnival_0_0.5$Pathway &lt;- NULL
+PathwayActivity_carnival_0_0.5$...1 &lt;- NULL
+
+progenylist_0_0.5 = assignPROGENyScores(progeny = t(PathwayActivity_carnival_0_0.5), 
+                                            progenyMembers = progenyMembers, 
+                                            id = &quot;gene&quot;, 
+                                            access_idx = 1)
+
+# Subset2
+PathwayActivity_carnival_0.5_1 &lt;- data.frame(PathwayActivity_CARNIVALinput.list$`Subset day 0.5 vs. 1`, stringsAsFactors = F)
+
+rownames(PathwayActivity_carnival_0.5_1) &lt;- PathwayActivity_carnival_0.5_1$Pathway
+PathwayActivity_carnival_0.5_1$Pathway &lt;- NULL
+PathwayActivity_carnival_0.5_1$...1 &lt;- NULL
+
+progenylist_0.5_1 = assignPROGENyScores(progeny = t(PathwayActivity_carnival_0.5_1), 
+                                            progenyMembers = progenyMembers, 
+                                            id = &quot;gene&quot;, 
+                                            access_idx = 1)
+
+# Subset3
+PathwayActivity_carnival_1_1.5 &lt;- data.frame(PathwayActivity_CARNIVALinput.list$`Subset day 1 vs. 1.5`, stringsAsFactors = F)
+
+rownames(PathwayActivity_carnival_1_1.5) &lt;- PathwayActivity_carnival_1_1.5$Pathway
+PathwayActivity_carnival_1_1.5$Pathway &lt;- NULL
+PathwayActivity_carnival_1_1.5$...1 &lt;- NULL
+
+progenylist_1_1.5 = assignPROGENyScores(progeny = t(PathwayActivity_carnival_1_1.5), 
+                                            progenyMembers = progenyMembers, 
+                                            id = &quot;gene&quot;, 
+                                            access_idx = 1)
+
+# Subset4
+PathwayActivity_carnival_1.5_2 &lt;- data.frame(PathwayActivity_CARNIVALinput.list$`Subset day 1.5 vs. 2`, stringsAsFactors = F)
+
+rownames(PathwayActivity_carnival_1.5_2) &lt;- PathwayActivity_carnival_1.5_2$Pathway
+PathwayActivity_carnival_1.5_2$Pathway &lt;- NULL
+PathwayActivity_carnival_1.5_2$...1 &lt;- NULL
+
+progenylist_1.5_2 = assignPROGENyScores(progeny = t(PathwayActivity_carnival_1.5_2), 
+                                            progenyMembers = progenyMembers, 
+                                            id = &quot;gene&quot;, 
+                                            access_idx = 1)
+
+# Subset5
+PathwayActivity_carnival_2_2.5 &lt;- data.frame(PathwayActivity_CARNIVALinput.list$`Subset day 2 vs. 2.5`, stringsAsFactors = F)
+
+rownames(PathwayActivity_carnival_2_2.5) &lt;- PathwayActivity_carnival_2_2.5$Pathway
+PathwayActivity_carnival_2_2.5$Pathway &lt;- NULL
+PathwayActivity_carnival_2_2.5$...1 &lt;- NULL
+
+progenylist_2_2.5 = assignPROGENyScores(progeny = t(PathwayActivity_carnival_2_2.5), 
+                                            progenyMembers = progenyMembers, 
+                                            id = &quot;gene&quot;, 
+                                            access_idx = 1)
+
+# Subset6
+PathwayActivity_carnival_2.5_3 &lt;- data.frame(PathwayActivity_CARNIVALinput.list$`Subset day 2.5 vs. day 3`, stringsAsFactors = F)
+
+rownames(PathwayActivity_carnival_2.5_3) &lt;- PathwayActivity_carnival_2.5_3$Pathway
+PathwayActivity_carnival_2.5_3$Pathway &lt;- NULL
+PathwayActivity_carnival_2.5_3$...1 &lt;- NULL
+
+progenylist_2.5_3 = assignPROGENyScores(progeny = t(PathwayActivity_carnival_2.5_3), 
+                                            progenyMembers = progenyMembers, 
+                                            id = &quot;gene&quot;, 
+                                            access_idx = 1)
+# Subset7
+PathwayActivity_carnival_3_4.5 &lt;- data.frame(PathwayActivity_CARNIVALinput.list$`Subset day 3 vs. day 4.5`, stringsAsFactors = F)
+
+rownames(PathwayActivity_carnival_3_4.5) &lt;- PathwayActivity_carnival_3_4.5$Pathway
+PathwayActivity_carnival_3_4.5$Pathway &lt;- NULL
+PathwayActivity_carnival_3_4.5$...1 &lt;- NULL
+
+progenylist_3_4.5 = assignPROGENyScores(progeny = t(PathwayActivity_carnival_3_4.5), 
+                                            progenyMembers = progenyMembers, 
+                                            id = &quot;gene&quot;, 
+                                            access_idx = 1)
+
+# Subset8
+PathwayActivity_carnival_4.5_5 &lt;- data.frame(PathwayActivity_CARNIVALinput.list$`Subset day 4.5 vs. day 5`, stringsAsFactors = F)
+
+rownames(PathwayActivity_carnival_4.5_5) &lt;- PathwayActivity_carnival_4.5_5$Pathway
+PathwayActivity_carnival_4.5_5$Pathway &lt;- NULL
+PathwayActivity_carnival_4.5_5$...1 &lt;- NULL
+
+progenylist_4_4.5 = assignPROGENyScores(progeny = t(PathwayActivity_carnival_4.5_5), 
+                                            progenyMembers = progenyMembers, 
+                                            id = &quot;gene&quot;, 
+                                            access_idx = 1)
+
+# Subset9
+PathwayActivity_carnival_5_6 &lt;- data.frame(PathwayActivity_CARNIVALinput.list$`Subset day 5 vs 6`, stringsAsFactors = F)
+
+rownames(PathwayActivity_carnival_5_6) &lt;- PathwayActivity_carnival_5_6$Pathway
+PathwayActivity_carnival_5_6$Pathway &lt;- NULL
+PathwayActivity_carnival_5_6$...1 &lt;- NULL
+
+progenylist_5_6 = assignPROGENyScores(progeny = t(PathwayActivity_carnival_5_6), 
+                                            progenyMembers = progenyMembers, 
+                                            id = &quot;gene&quot;, 
+                                            access_idx = 1)</code></pre>
+</div>
+<div id="running-carnival" class="section level2">
+<h2>Running carnival</h2>
+<p>CARNIVAL has the ability to determine the causal link between TF activty and the ‘pertubed’/‘differentiated’ nodes. The current version of CARNIVAL, v1.0.0, there are 3 main inputs that need to be provided:</p>
+<ul>
+<li><em>measObj</em>: TF activities from DoRothEA</li>
+<li><em>inputObj</em>: The ‘perturbed’/‘differentiated’ nodes that CARNIVAL needs to connect with the TF activities</li>
+</ul>
+<p>There are a variety of possibilities to connect these nodes:</p>
+<ul>
+<li><p>Give a name to and sign specific to the selected nodes</p></li>
+<li><p>Give only a name to the selected node so the alogrithm will select the sign that represents the best fit of the model</p></li>
+<li><p>Give NULL as a value to each of the nodes will create a ‘pertubation’ node, which will assess both signs for all ‘initial’ nodes given by <em>netObj</em>.</p></li>
+<li><p><em>netObj</em>: The network/map that has the ability to connect the TF activites from <em>measObj</em> with the pertubed nodes <em>inputObj</em></p></li>
+</ul>
+<p>A fourth object <em>weightObj</em> can be created as well, but this is not necessary. It will aid the program in solving the optimal solution quicker by assigning values ranged from -1 to 1 for a set of nodes within the network.</p>
+<p>For these initial analyses CARNIVAL will be allowed to select the signs that will best fit the nodes in the model (option 2). The weight object will then represent the PROGENy scores assigned to the genes most represented in the calculated pathways.</p>
+<pre class="r"><code># get initial nodes  for inputObj
+# This particular piece of code is identical for each dataset it will give a general node map which we will specify to each subet by running CARNIVAL
+iniMTX = base::setdiff(sif$source, sif$target)
+iniciators = base::data.frame(base::matrix(data = NaN, nrow = 1, ncol = length(iniMTX)), stringsAsFactors = F)
+colnames(iniciators) = iniMTX</code></pre>
+<pre class="r"><code># This section will give the code for one of the respective subsets. However I did not execute that in this .rmd as this will cause errors
+#carnival_result_subset1 = runCARNIVAL( inputObj= iniciators,
+#                               measObj = tfList_subset1$t, 
+#                               netObj = sif, 
+#                               weightObj = progenylist_0_0.5$score, 
+#                               solverPath = &quot;C:/Program Files/IBM/ILOG/CPLEX_Studio221/cplex/bin/x64_win64&quot;, 
+#                               solver = &quot;cplex&quot;,
+#                               timelimit=7200,
+#                               mipGAP=0,
+#                               poolrelGAP=0 )</code></pre>
+<p>The carnival results will contain weighted_Sif objects, which contain the nodes and edges of the respective network I would like to visualize. As CARNIVAL is still being optimized by the developers, I chose to visualize these obtained networks with Cytoscape.</p>
+<p>Following the main visualization and filtering on weights in which all nodes were extracted with a weight below 1. It was of interest to combine all of these subsets so each interaction that showed a change over time could be captured through another visualization.</p>
+<pre class="r"><code># Load file which contains relevant interactions for all the subsets
+Combined_weighted_sif_useful &lt;- read.csv(&quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/analysis/Combined_weighted_sif_useful.csv&quot;)
+
+# Create a new column that contains a combination of node name 1 and 2
+Edge_weight&lt;-Combined_weighted_sif_useful
+Edge_weight$Interaction&lt;-paste(Combined_weighted_sif_useful$Node1, &quot;-&quot;, Combined_weighted_sif_useful$Node2)
+# Remove columns we don&#39;t need
+library(tidyverse)</code></pre>
+<pre><code>── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
+<pre><code>✔ purrr   0.3.4     ✔ forcats 0.5.1
+✔ stringr 1.4.0     </code></pre>
+<pre><code>── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>Edge_weight&lt;-select(Edge_weight, -Node1, -Sign, - Node2, -Weightsums, -X)
+# Interaction column to rownames
+Edge_weight&lt;-column_to_rownames(Edge_weight, var = &quot;Interaction&quot;)
+
+# create heatmap
+library(pheatmap)
+library(RColorBrewer)
+
+# Annotate row with interaction type inhibition or activation
+Annotation_sign&lt;-Combined_weighted_sif_useful
+Annotation_sign$Interaction&lt;-paste(Combined_weighted_sif_useful$Node1, &quot;-&quot;, Combined_weighted_sif_useful$Node2)
+Annotation_sign&lt;-select(Annotation_sign, -Node1, -Node2, -weight_subset1, -weight_subset2,-weight_subset3,-weight_subset4,-weight_subset5,-weight_subset6,-weight_subset7,-weight_subset8,-weight_subset9, -Weightsums, -X)
+Annotation_sign&lt;-column_to_rownames(Annotation_sign,var = &quot;Interaction&quot;)
+
+# Change annotation to something readable
+Annotation_sign[Annotation_sign == &quot;-1&quot;] &lt;- &quot;Inhibition&quot;
+Annotation_sign[Annotation_sign == &quot;1&quot;] &lt;- &quot;Activation&quot;
+
+# Annotation colors
+annot_colors=list(Interaction=c(Activation=&quot;#F0978D&quot;,Inhibition=&quot;#63D7DE&quot;))
+
+# Call pheatmap
+pheatmap(Edge_weight, cluster_cols = FALSE, cluster_rows = TRUE, main = &quot;Representation CARNIVAL interaction weights&quot;, color = brewer.pal(8, &quot;Reds&quot;), fontsize_row = 5, annotation_row = Annotation_sign, annotation_colors = annot_colors)</code></pre>
+<p><img src="figure/Carnival_subsets_khavari_final.Rmd/unnamed-chunk-4-1.png" width="960" style="display: block; margin: auto;" /> # Enrichment analysis</p>
+<p>Now we have an overview of which interactions are crucial in this differentiation trajectory it is of interest to interpret the meaning of those interactions. Therefore a GO-enrichment analysis will be performed using the PianoR package.</p>
+<pre class="r"><code># Load libraries
+library(readr)
+library(piano)
+library(dplyr)
+library(ggplot2)
+library(tibble)
+library(tidyr)
+library(dplyr)
+library(scales)</code></pre>
+<pre><code>
+Attaching package: &#39;scales&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:purrr&#39;:
+
+    discard</code></pre>
+<pre><code>The following object is masked from &#39;package:readr&#39;:
+
+    col_factor</code></pre>
+<pre class="r"><code>library(plyr)</code></pre>
+<pre><code>------------------------------------------------------------------------------</code></pre>
+<pre><code>You have loaded plyr after dplyr - this is likely to cause problems.
+If you need functions from both plyr and dplyr, please load plyr first, then dplyr:
+library(plyr); library(dplyr)</code></pre>
+<pre><code>------------------------------------------------------------------------------</code></pre>
+<pre><code>
+Attaching package: &#39;plyr&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:purrr&#39;:
+
+    compact</code></pre>
+<pre><code>The following objects are masked from &#39;package:dplyr&#39;:
+
+    arrange, count, desc, failwith, id, mutate, rename, summarise,
+    summarize</code></pre>
+<pre><code>The following object is masked from &#39;package:here&#39;:
+
+    here</code></pre>
+<pre class="r"><code>library(GSEABase)</code></pre>
+<pre><code>Loading required package: BiocGenerics</code></pre>
+<pre><code>
+Attaching package: &#39;BiocGenerics&#39;</code></pre>
+<pre><code>The following objects are masked from &#39;package:dplyr&#39;:
+
+    combine, intersect, setdiff, union</code></pre>
+<pre><code>The following objects are masked from &#39;package:stats&#39;:
+
+    IQR, mad, sd, var, xtabs</code></pre>
+<pre><code>The following objects are masked from &#39;package:base&#39;:
+
+    anyDuplicated, append, as.data.frame, basename, cbind, colnames,
+    dirname, do.call, duplicated, eval, evalq, Filter, Find, get, grep,
+    grepl, intersect, is.unsorted, lapply, Map, mapply, match, mget,
+    order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
+    rbind, Reduce, rownames, sapply, setdiff, sort, table, tapply,
+    union, unique, unsplit, which.max, which.min</code></pre>
+<pre><code>Loading required package: Biobase</code></pre>
+<pre><code>Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    &#39;browseVignettes()&#39;. To cite Bioconductor, see
+    &#39;citation(&quot;Biobase&quot;)&#39;, and for packages &#39;citation(&quot;pkgname&quot;)&#39;.</code></pre>
+<pre><code>Loading required package: annotate</code></pre>
+<pre><code>Loading required package: AnnotationDbi</code></pre>
+<pre><code>Loading required package: stats4</code></pre>
+<pre><code>Loading required package: IRanges</code></pre>
+<pre><code>Loading required package: S4Vectors</code></pre>
+<pre><code>
+Attaching package: &#39;S4Vectors&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:plyr&#39;:
+
+    rename</code></pre>
+<pre><code>The following objects are masked from &#39;package:dplyr&#39;:
+
+    first, rename</code></pre>
+<pre><code>The following object is masked from &#39;package:tidyr&#39;:
+
+    expand</code></pre>
+<pre><code>The following objects are masked from &#39;package:base&#39;:
+
+    expand.grid, I, unname</code></pre>
+<pre><code>
+Attaching package: &#39;IRanges&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:plyr&#39;:
+
+    desc</code></pre>
+<pre><code>The following object is masked from &#39;package:purrr&#39;:
+
+    reduce</code></pre>
+<pre><code>The following objects are masked from &#39;package:dplyr&#39;:
+
+    collapse, desc, slice</code></pre>
+<pre><code>The following object is masked from &#39;package:grDevices&#39;:
+
+    windows</code></pre>
+<pre><code>
+Attaching package: &#39;AnnotationDbi&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:dplyr&#39;:
+
+    select</code></pre>
+<pre><code>Loading required package: XML</code></pre>
+<pre><code>Loading required package: graph</code></pre>
+<pre><code>
+Attaching package: &#39;graph&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:XML&#39;:
+
+    addNode</code></pre>
+<pre><code>The following object is masked from &#39;package:plyr&#39;:
+
+    join</code></pre>
+<pre><code>The following object is masked from &#39;package:stringr&#39;:
+
+    boundary</code></pre>
+<pre class="r"><code>library(network)</code></pre>
+<pre><code>
+&#39;network&#39; 1.17.1 (2021-06-12), part of the Statnet Project
+* &#39;news(package=&quot;network&quot;)&#39; for changes since last version
+* &#39;citation(&quot;network&quot;)&#39; for citation information
+* &#39;https://statnet.org&#39; for help, support, and other information</code></pre>
+<pre><code>
+Attaching package: &#39;network&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:plyr&#39;:
+
+    is.discrete</code></pre>
+<pre class="r"><code>library(reshape2)</code></pre>
+<pre><code>
+Attaching package: &#39;reshape2&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:tidyr&#39;:
+
+    smiths</code></pre>
+<pre class="r"><code>library(cowplot)
+library(pheatmap)
+library(ggraph)
+library(tidygraph)</code></pre>
+<pre><code>
+Attaching package: &#39;tidygraph&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:AnnotationDbi&#39;:
+
+    select</code></pre>
+<pre><code>The following objects are masked from &#39;package:IRanges&#39;:
+
+    active, slice</code></pre>
+<pre><code>The following objects are masked from &#39;package:S4Vectors&#39;:
+
+    active, rename</code></pre>
+<pre><code>The following objects are masked from &#39;package:plyr&#39;:
+
+    arrange, mutate, rename</code></pre>
+<pre><code>The following object is masked from &#39;package:stats&#39;:
+
+    filter</code></pre>
+<pre class="r"><code># Support function
+#&#39;\code{gmt_to_csv}
+#&#39;
+#&#39;This function is designed to convert a gmt file into a two column dataframe where first column correspond to omic features and second column correspond to associated terms.
+#&#39;
+#&#39;@param gmtfile a full path name of the gmt file to be converted
+#&#39;@param outfile an optional output file name. If none is provided, the function will simply return a dataframe.
+#&#39;If outfile is provided with a full length path name file, the dataframe will be written as a csv file to the path provided.
+#&#39;@return a two column dataframe where first column correspond to omic features and second column correspond to associated terms.
+gmt_to_csv &lt;- function(gmtfile, fast = T)
+{
+  if(fast)
+  {
+    genesets = GSEABase::getGmt(con = gmtfile)
+    genesets = unlist(genesets)
+    
+    gene_to_term =plyr::ldply(genesets,function(geneset){
+      temp &lt;- geneIds(geneset)
+      temp2 &lt;- setName(geneset)
+      temp3 &lt;- as.data.frame(cbind(temp,rep(temp2,length(temp))))
+      
+    },.progress = plyr::progress_text())
+    names(gene_to_term) &lt;- c(&quot;gene&quot;,&quot;term&quot;)
+    return(gene_to_term[complete.cases(gene_to_term),])
+  }
+  else
+  {
+    genesets = getGmt(con = gmtfile)
+    genesets = unlist(genesets)
+    
+    gene_to_term &lt;- data.frame(NA,NA)
+    names(gene_to_term) &lt;- c(&quot;gene&quot;,&quot;term&quot;)
+    for (geneset in genesets)
+    {
+      temp &lt;- geneIds(geneset)
+      temp2 &lt;- setName(geneset)
+      temp3 &lt;- as.data.frame(cbind(temp,rep(temp2,length(temp))))
+      names(temp3) &lt;- c(&quot;gene&quot;,&quot;term&quot;)
+      gene_to_term &lt;- rbind(gene_to_term,temp3)
+    }
+    
+    return(gene_to_term[complete.cases(gene_to_term),])
+  }
+}</code></pre>
+<pre class="r"><code># Load pathways
+pathways = gmt_to_csv(&quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/Tutorial_Saez_lab/Full tutorial/data/c2.cp.v7.1.symbols.gmt&quot;)</code></pre>
+<pre><code>
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |                                                                      |   1%
+  |                                                                            
+  |=                                                                     |   1%
+  |                                                                            
+  |=                                                                     |   2%
+  |                                                                            
+  |==                                                                    |   2%
+  |                                                                            
+  |==                                                                    |   3%
+  |                                                                            
+  |==                                                                    |   4%
+  |                                                                            
+  |===                                                                   |   4%
+  |                                                                            
+  |===                                                                   |   5%
+  |                                                                            
+  |====                                                                  |   5%
+  |                                                                            
+  |====                                                                  |   6%
+  |                                                                            
+  |=====                                                                 |   6%
+  |                                                                            
+  |=====                                                                 |   7%
+  |                                                                            
+  |=====                                                                 |   8%
+  |                                                                            
+  |======                                                                |   8%
+  |                                                                            
+  |======                                                                |   9%
+  |                                                                            
+  |=======                                                               |   9%
+  |                                                                            
+  |=======                                                               |  10%
+  |                                                                            
+  |=======                                                               |  11%
+  |                                                                            
+  |========                                                              |  11%
+  |                                                                            
+  |========                                                              |  12%
+  |                                                                            
+  |=========                                                             |  12%
+  |                                                                            
+  |=========                                                             |  13%
+  |                                                                            
+  |=========                                                             |  14%
+  |                                                                            
+  |==========                                                            |  14%
+  |                                                                            
+  |==========                                                            |  15%
+  |                                                                            
+  |===========                                                           |  15%
+  |                                                                            
+  |===========                                                           |  16%
+  |                                                                            
+  |============                                                          |  16%
+  |                                                                            
+  |============                                                          |  17%
+  |                                                                            
+  |============                                                          |  18%
+  |                                                                            
+  |=============                                                         |  18%
+  |                                                                            
+  |=============                                                         |  19%
+  |                                                                            
+  |==============                                                        |  19%
+  |                                                                            
+  |==============                                                        |  20%
+  |                                                                            
+  |==============                                                        |  21%
+  |                                                                            
+  |===============                                                       |  21%
+  |                                                                            
+  |===============                                                       |  22%
+  |                                                                            
+  |================                                                      |  22%
+  |                                                                            
+  |================                                                      |  23%
+  |                                                                            
+  |================                                                      |  24%
+  |                                                                            
+  |=================                                                     |  24%
+  |                                                                            
+  |=================                                                     |  25%
+  |                                                                            
+  |==================                                                    |  25%
+  |                                                                            
+  |==================                                                    |  26%
+  |                                                                            
+  |===================                                                   |  26%
+  |                                                                            
+  |===================                                                   |  27%
+  |                                                                            
+  |===================                                                   |  28%
+  |                                                                            
+  |====================                                                  |  28%
+  |                                                                            
+  |====================                                                  |  29%
+  |                                                                            
+  |=====================                                                 |  29%
+  |                                                                            
+  |=====================                                                 |  30%
+  |                                                                            
+  |=====================                                                 |  31%
+  |                                                                            
+  |======================                                                |  31%
+  |                                                                            
+  |======================                                                |  32%
+  |                                                                            
+  |=======================                                               |  32%
+  |                                                                            
+  |=======================                                               |  33%
+  |                                                                            
+  |=======================                                               |  34%
+  |                                                                            
+  |========================                                              |  34%
+  |                                                                            
+  |========================                                              |  35%
+  |                                                                            
+  |=========================                                             |  35%
+  |                                                                            
+  |=========================                                             |  36%
+  |                                                                            
+  |==========================                                            |  36%
+  |                                                                            
+  |==========================                                            |  37%
+  |                                                                            
+  |==========================                                            |  38%
+  |                                                                            
+  |===========================                                           |  38%
+  |                                                                            
+  |===========================                                           |  39%
+  |                                                                            
+  |============================                                          |  39%
+  |                                                                            
+  |============================                                          |  40%
+  |                                                                            
+  |============================                                          |  41%
+  |                                                                            
+  |=============================                                         |  41%
+  |                                                                            
+  |=============================                                         |  42%
+  |                                                                            
+  |==============================                                        |  42%
+  |                                                                            
+  |==============================                                        |  43%
+  |                                                                            
+  |==============================                                        |  44%
+  |                                                                            
+  |===============================                                       |  44%
+  |                                                                            
+  |===============================                                       |  45%
+  |                                                                            
+  |================================                                      |  45%
+  |                                                                            
+  |================================                                      |  46%
+  |                                                                            
+  |=================================                                     |  46%
+  |                                                                            
+  |=================================                                     |  47%
+  |                                                                            
+  |=================================                                     |  48%
+  |                                                                            
+  |==================================                                    |  48%
+  |                                                                            
+  |==================================                                    |  49%
+  |                                                                            
+  |===================================                                   |  49%
+  |                                                                            
+  |===================================                                   |  50%
+  |                                                                            
+  |===================================                                   |  51%
+  |                                                                            
+  |====================================                                  |  51%
+  |                                                                            
+  |====================================                                  |  52%
+  |                                                                            
+  |=====================================                                 |  52%
+  |                                                                            
+  |=====================================                                 |  53%
+  |                                                                            
+  |=====================================                                 |  54%
+  |                                                                            
+  |======================================                                |  54%
+  |                                                                            
+  |======================================                                |  55%
+  |                                                                            
+  |=======================================                               |  55%
+  |                                                                            
+  |=======================================                               |  56%
+  |                                                                            
+  |========================================                              |  56%
+  |                                                                            
+  |========================================                              |  57%
+  |                                                                            
+  |========================================                              |  58%
+  |                                                                            
+  |=========================================                             |  58%
+  |                                                                            
+  |=========================================                             |  59%
+  |                                                                            
+  |==========================================                            |  59%
+  |                                                                            
+  |==========================================                            |  60%
+  |                                                                            
+  |==========================================                            |  61%
+  |                                                                            
+  |===========================================                           |  61%
+  |                                                                            
+  |===========================================                           |  62%
+  |                                                                            
+  |============================================                          |  62%
+  |                                                                            
+  |============================================                          |  63%
+  |                                                                            
+  |============================================                          |  64%
+  |                                                                            
+  |=============================================                         |  64%
+  |                                                                            
+  |=============================================                         |  65%
+  |                                                                            
+  |==============================================                        |  65%
+  |                                                                            
+  |==============================================                        |  66%
+  |                                                                            
+  |===============================================                       |  66%
+  |                                                                            
+  |===============================================                       |  67%
+  |                                                                            
+  |===============================================                       |  68%
+  |                                                                            
+  |================================================                      |  68%
+  |                                                                            
+  |================================================                      |  69%
+  |                                                                            
+  |=================================================                     |  69%
+  |                                                                            
+  |=================================================                     |  70%
+  |                                                                            
+  |=================================================                     |  71%
+  |                                                                            
+  |==================================================                    |  71%
+  |                                                                            
+  |==================================================                    |  72%
+  |                                                                            
+  |===================================================                   |  72%
+  |                                                                            
+  |===================================================                   |  73%
+  |                                                                            
+  |===================================================                   |  74%
+  |                                                                            
+  |====================================================                  |  74%
+  |                                                                            
+  |====================================================                  |  75%
+  |                                                                            
+  |=====================================================                 |  75%
+  |                                                                            
+  |=====================================================                 |  76%
+  |                                                                            
+  |======================================================                |  76%
+  |                                                                            
+  |======================================================                |  77%
+  |                                                                            
+  |======================================================                |  78%
+  |                                                                            
+  |=======================================================               |  78%
+  |                                                                            
+  |=======================================================               |  79%
+  |                                                                            
+  |========================================================              |  79%
+  |                                                                            
+  |========================================================              |  80%
+  |                                                                            
+  |========================================================              |  81%
+  |                                                                            
+  |=========================================================             |  81%
+  |                                                                            
+  |=========================================================             |  82%
+  |                                                                            
+  |==========================================================            |  82%
+  |                                                                            
+  |==========================================================            |  83%
+  |                                                                            
+  |==========================================================            |  84%
+  |                                                                            
+  |===========================================================           |  84%
+  |                                                                            
+  |===========================================================           |  85%
+  |                                                                            
+  |============================================================          |  85%
+  |                                                                            
+  |============================================================          |  86%
+  |                                                                            
+  |=============================================================         |  86%
+  |                                                                            
+  |=============================================================         |  87%
+  |                                                                            
+  |=============================================================         |  88%
+  |                                                                            
+  |==============================================================        |  88%
+  |                                                                            
+  |==============================================================        |  89%
+  |                                                                            
+  |===============================================================       |  89%
+  |                                                                            
+  |===============================================================       |  90%
+  |                                                                            
+  |===============================================================       |  91%
+  |                                                                            
+  |================================================================      |  91%
+  |                                                                            
+  |================================================================      |  92%
+  |                                                                            
+  |=================================================================     |  92%
+  |                                                                            
+  |=================================================================     |  93%
+  |                                                                            
+  |=================================================================     |  94%
+  |                                                                            
+  |==================================================================    |  94%
+  |                                                                            
+  |==================================================================    |  95%
+  |                                                                            
+  |===================================================================   |  95%
+  |                                                                            
+  |===================================================================   |  96%
+  |                                                                            
+  |====================================================================  |  96%
+  |                                                                            
+  |====================================================================  |  97%
+  |                                                                            
+  |====================================================================  |  98%
+  |                                                                            
+  |===================================================================== |  98%
+  |                                                                            
+  |===================================================================== |  99%
+  |                                                                            
+  |======================================================================|  99%
+  |                                                                            
+  |======================================================================| 100%</code></pre>
+<pre class="r"><code># Extract nodes and background
+#nodes_carnival = extractCARNIVALnodes(carnival_result)
+# I already got the nodes previously they are added to the data folder
+# subset1
+nodes_subset_1 &lt;- read_csv(&quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/Carnival subset nodes/nodes_subset1.csv&quot;)</code></pre>
+<pre><code>New names:
+Rows: 5831 Columns: 3
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+(2): sucesses, bg dbl (1): ...1
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...1`</code></pre>
+<pre class="r"><code>nodes_subset_1=nodes_subset_1[ ,-1] 
+# subset2
+nodes_subset_2 &lt;- read_csv(&quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/Carnival subset nodes/nodes_subset2.csv&quot;)</code></pre>
+<pre><code>New names:
+Rows: 5831 Columns: 3
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+(2): sucesses, bg dbl (1): ...1
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...1`</code></pre>
+<pre class="r"><code>nodes_subset_2=nodes_subset_2[ ,-1] 
+# Subset3
+nodes_subset_3 &lt;- read_csv(&quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/Carnival subset nodes/nodes_subset3.csv&quot;)</code></pre>
+<pre><code>New names:
+Rows: 5831 Columns: 3
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+(2): sucesses, bg dbl (1): ...1
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...1`</code></pre>
+<pre class="r"><code>nodes_subset_3=nodes_subset_2[ ,-1] 
+# Subset4
+nodes_subset_4 &lt;- read_csv(&quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/Carnival subset nodes/nodes_subset4.csv&quot;)</code></pre>
+<pre><code>New names:
+Rows: 5831 Columns: 3
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+(2): sucesses, bg dbl (1): ...1
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...1`</code></pre>
+<pre class="r"><code>nodes_subset_4=nodes_subset_4[ ,-1] 
+# Subset5
+nodes_subset_5 &lt;- read_csv(&quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/Carnival subset nodes/nodes_subset5.csv&quot;)</code></pre>
+<pre><code>New names:
+Rows: 5831 Columns: 3
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+(2): sucesses, bg dbl (1): ...1
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...1`</code></pre>
+<pre class="r"><code>nodes_subset_5=nodes_subset_5[ ,-1] 
+# Subset6
+nodes_subset_6 &lt;- read_csv(&quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/Carnival subset nodes/nodes_subset6.csv&quot;)</code></pre>
+<pre><code>New names:
+Rows: 5831 Columns: 3
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+(2): sucesses, bg dbl (1): ...1
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...1`</code></pre>
+<pre class="r"><code>nodes_subset_6=nodes_subset_6[ ,-1]
+# Subset7
+nodes_subset_7 &lt;- read_csv(&quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/Carnival subset nodes/nodes_subset7.csv&quot;)</code></pre>
+<pre><code>New names:
+Rows: 5831 Columns: 3
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+(2): sucesses, bg dbl (1): ...1
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...1`</code></pre>
+<pre class="r"><code>nodes_subset_7=nodes_subset_7[ ,-1] 
+# Subset8
+nodes_subset_8 &lt;- read_csv(&quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/Carnival subset nodes/nodes_subset8.csv&quot;)</code></pre>
+<pre><code>New names:
+Rows: 5831 Columns: 3
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+(2): sucesses, bg dbl (1): ...1
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...1`</code></pre>
+<pre class="r"><code>nodes_subset_8=nodes_subset_8[ ,-1] 
+# Subset9
+nodes_subset_9 &lt;- read_csv(&quot;C:/Users/cheye/OneDrive/Bureaublad/Radboud/Master 21-22/Internship/Data and analysis/CARNIVAL/data/Carnival subset nodes/nodes_subset9.csv&quot;)</code></pre>
+<pre><code>New names:
+Rows: 5831 Columns: 3
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+(2): sucesses, bg dbl (1): ...1
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...1`</code></pre>
+<pre class="r"><code>nodes_subset_9=nodes_subset_9[ ,-1] 
+
+# Make dataframe combining all subsets
+nodes_carnival_allsets&lt;-merge(nodes_subset_1, nodes_subset_2)
+nodes_carnival_allsets&lt;-merge(nodes_carnival_allsets, nodes_subset_3)
+nodes_carnival_allsets&lt;-merge(nodes_carnival_allsets, nodes_subset_4)
+nodes_carnival_allsets&lt;-merge(nodes_carnival_allsets, nodes_subset_5)
+nodes_carnival_allsets&lt;-merge(nodes_carnival_allsets, nodes_subset_6)
+nodes_carnival_allsets&lt;-merge(nodes_carnival_allsets, nodes_subset_7)
+nodes_carnival_allsets&lt;-merge(nodes_carnival_allsets, nodes_subset_8)
+nodes_carnival_allsets&lt;-merge(nodes_carnival_allsets, nodes_subset_9)
+
+# Run GSA hyper Geometric test
+sig_pathways &lt;- runGSAhyper(genes = nodes_carnival_allsets$sucesses, 
+    gsc = loadGSC(pathways))</code></pre>
+<pre><code>Using all genes present in argument gsc as universe.</code></pre>
+<pre><code>Warning in runGSAhyper(genes = nodes_carnival_allsets$sucesses, gsc =
+loadGSC(pathways)): not all genes given by argument genes are present in
+universe, these will be added to universe</code></pre>
+<pre><code>Analyzing the overrepresentation of 5831 genes of interest in 2232 gene sets, using a background of 6877 non-interesting genes.</code></pre>
+<pre class="r"><code>sig_pathways_df &lt;- as.data.frame(sig_pathways$resTab)  %&gt;% 
+  tibble::rownames_to_column(var = &quot;pathway&quot;) </code></pre>
+<pre class="r"><code>#data for plotting
+PathwaysSelect &lt;- sig_pathways_df %&gt;%
+    dplyr::select(pathway, `p-value`, `Adjusted p-value`) %&gt;%
+    dplyr::filter(`Adjusted p-value` &lt;= 0.001) %&gt;%
+    dplyr::rename(pvalue = `p-value`, AdjPvalu = `Adjusted p-value`) %&gt;% 
+    dplyr::mutate(pathway = as.factor(pathway))
+
+PathwaysSelect &lt;- data.frame(t(apply(PathwaysSelect, 1, function(r){
+  aux = unlist(strsplit( sub(&quot;_&quot;,&quot;;&quot;, r[&quot;pathway&quot;]), &quot;;&quot; ))
+  r[&quot;pathway&quot;] = gsub(&quot;_&quot;, &quot; &quot;, aux[2])
+  return(c(r, &quot;source&quot; = aux[1]))
+})))
+
+colnames(PathwaysSelect) = c(&quot;pathway&quot;, &quot;pvalue&quot;, &quot;AdjPvalu&quot;, &quot;source&quot;)
+PathwaysSelect$AdjPvalu = as.numeric(PathwaysSelect$AdjPvalu)
+
+ggdata = PathwaysSelect %&gt;% 
+    dplyr::filter(AdjPvalu &lt;= 0.05) %&gt;% 
+    dplyr::group_by(source) %&gt;% 
+    dplyr::arrange(AdjPvalu) %&gt;%
+    dplyr::slice(1:5)
+
+  
+# Visualize top results
+ggplot(ggdata, aes(y = reorder(pathway, AdjPvalu), x = -log10(AdjPvalu)), color = source) + 
+        geom_bar(stat = &quot;identity&quot;, fill = &quot;#00BFC4&quot;) +
+        facet_grid(source ~ ., scales=&quot;free_y&quot;) +
+        scale_x_continuous(
+                         expand = c(0.01, 0.01),
+                         limits = c(0, ceiling(max(-log10(PathwaysSelect$AdjPvalu)))),
+                         breaks = seq(floor(min(-log10(PathwaysSelect$AdjPvalu))), ceiling(max(-log10(PathwaysSelect$AdjPvalu))), 1),
+                         labels = math_format(10^-.x)
+                         ) +
+        annotation_logticks(sides = &quot;bt&quot;) +
+        theme_bw() + theme(axis.text.x = element_text(angle = 90))+ ggtitle(&quot;Significantly active pathways during keratinocyte differentiation&quot;)</code></pre>
+<p><img src="figure/Carnival_subsets_khavari_final.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>        theme(axis.title = element_text(face = &quot;bold&quot;, size = 12),
+              axis.text.y = element_text(size = 6)) +
+        ylab(&quot;&quot;)</code></pre>
+<pre><code>List of 3
+ $ axis.title :List of 11
+  ..$ family       : NULL
+  ..$ face         : chr &quot;bold&quot;
+  ..$ colour       : NULL
+  ..$ size         : num 12
+  ..$ hjust        : NULL
+  ..$ vjust        : NULL
+  ..$ angle        : NULL
+  ..$ lineheight   : NULL
+  ..$ margin       : NULL
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi FALSE
+  ..- attr(*, &quot;class&quot;)= chr [1:2] &quot;element_text&quot; &quot;element&quot;
+ $ axis.text.y:List of 11
+  ..$ family       : NULL
+  ..$ face         : NULL
+  ..$ colour       : NULL
+  ..$ size         : num 6
+  ..$ hjust        : NULL
+  ..$ vjust        : NULL
+  ..$ angle        : NULL
+  ..$ lineheight   : NULL
+  ..$ margin       : NULL
+  ..$ debug        : NULL
+  ..$ inherit.blank: logi FALSE
+  ..- attr(*, &quot;class&quot;)= chr [1:2] &quot;element_text&quot; &quot;element&quot;
+ $ y          : chr &quot;&quot;
+ - attr(*, &quot;class&quot;)= chr [1:2] &quot;theme&quot; &quot;gg&quot;
+ - attr(*, &quot;complete&quot;)= logi FALSE
+ - attr(*, &quot;validate&quot;)= logi TRUE</code></pre>
+<p>In addition to this enrichment analysis I would also like to see if I get similar results using clusterprofiler.</p>
+<pre class="r"><code># Start prepping for GO-analysis
+# create genes string
+Gene_String&lt;- nodes_carnival_allsets$sucesses
+
+# Install package that keeps our database
+#if (!require(&quot;BiocManager&quot;, quietly = TRUE))
+#    install.packages(&quot;BiocManager&quot;)
+
+#BiocManager::install(&quot;org.Hs.eg.db&quot;)
+
+# load library
+library(org.Hs.eg.db)</code></pre>
+<pre><code></code></pre>
+<pre class="r"><code>library(clusterProfiler)</code></pre>
+<pre><code></code></pre>
+<pre><code>clusterProfiler v4.4.2  For help: https://yulab-smu.top/biomedical-knowledge-mining-book/
+
+If you use clusterProfiler in published research, please cite:
+T Wu, E Hu, S Xu, M Chen, P Guo, Z Dai, T Feng, L Zhou, W Tang, L Zhan, X Fu, S Liu, X Bo, and G Yu. clusterProfiler 4.0: A universal enrichment tool for interpreting omics data. The Innovation. 2021, 2(3):100141</code></pre>
+<pre><code>
+Attaching package: &#39;clusterProfiler&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:AnnotationDbi&#39;:
+
+    select</code></pre>
+<pre><code>The following object is masked from &#39;package:IRanges&#39;:
+
+    slice</code></pre>
+<pre><code>The following object is masked from &#39;package:S4Vectors&#39;:
+
+    rename</code></pre>
+<pre><code>The following objects are masked from &#39;package:plyr&#39;:
+
+    arrange, mutate, rename, summarise</code></pre>
+<pre><code>The following object is masked from &#39;package:purrr&#39;:
+
+    simplify</code></pre>
+<pre><code>The following object is masked from &#39;package:stats&#39;:
+
+    filter</code></pre>
+<pre class="r"><code>ggo &lt;- groupGO(gene     = Gene_String,
+               OrgDb    = org.Hs.eg.db,
+               keyType  = &quot;SYMBOL&quot;,
+               ont      = &quot;CC&quot;,
+               level    = 3,
+               readable = FALSE)
+
+head(ggo)</code></pre>
+<pre><code>                   ID                Description Count GeneRatio
+GO:0000133 GO:0000133                 polarisome     0    0/5831
+GO:0000408 GO:0000408          EKC/KEOPS complex     1    1/5831
+GO:0000417 GO:0000417                HIR complex     1    1/5831
+GO:0000444 GO:0000444    MIS12/MIND type complex     1    1/5831
+GO:0000808 GO:0000808 origin recognition complex     3    3/5831
+GO:0000930 GO:0000930      gamma-tubulin complex     7    7/5831
+                                                 geneID
+GO:0000133                                             
+GO:0000408                                       TP53RK
+GO:0000417                                         HIRA
+GO:0000444                                         DSN1
+GO:0000808                               MCM2/ORC2/ORC1
+GO:0000930 BRCA1/TOPORS/TUBG1/CENPJ/TUBGCP6/PDE4B/MARK4</code></pre>
+<pre class="r"><code>#Any gene ID type that is supported in OrgDb can be directly used in GO analyses. Users need to specify the keyType parameter to specify the input gene ID type. # Keep in mind this is not significant!!! i have forced a GO analysis to get insight into what these genes mean
+ego &lt;- enrichGO(gene          = Gene_String,
+                
+                OrgDb         = org.Hs.eg.db,
+                keyType       = &quot;SYMBOL&quot;, 
+                ont           = &quot;CC&quot;,
+                pAdjustMethod = &quot;BH&quot;,
+                pvalueCutoff  = 0.05,
+                qvalueCutoff  = 0.2,
+        readable      = FALSE)
+head(ego)</code></pre>
+<pre><code>                   ID                     Description GeneRatio   BgRatio
+GO:0005667 GO:0005667 transcription regulator complex  319/5757 483/19594
+GO:0031252 GO:0031252               cell leading edge  281/5757 416/19594
+GO:0005925 GO:0005925                  focal adhesion  278/5757 419/19594
+GO:0030055 GO:0030055         cell-substrate junction  281/5757 428/19594
+GO:0045121 GO:0045121                   membrane raft  231/5757 326/19594
+GO:0098857 GO:0098857            membrane microdomain  231/5757 327/19594
+                 pvalue     p.adjust       qvalue
+GO:0005667 8.023017e-64 6.177723e-61 3.057192e-61
+GO:0031252 2.145060e-59 8.258482e-57 4.086904e-57
+GO:0005925 2.817012e-56 7.230330e-54 3.578099e-54
+GO:0030055 1.950358e-55 3.754438e-53 1.857972e-53
+GO:0045121 9.468664e-55 1.458174e-52 7.216119e-53
+GO:0098857 2.305060e-54 2.958161e-52 1.463916e-52
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   geneID
+GO:0005667 ADNP/AHR/APEX1/ARID4A/ARNT/ARNTL/ATF1/ATF2/ATF3/ATF4/BACH1/BCL9/BDP1/C1D/CBFB/CBX3/CBX5/CCND1/CCNH/CDK2/CDK4/CDK7/CEBPA/CEBPB/CEBPE/CLOCK/CREB1/CREBBP/CREBZF/CREM/CSNK2A1/CTBP1/CTBP2/CTNNB1/CTNNBIP1/DACH2/DDIT3/DDX20/DMBX1/DRAP1/E2F1/E2F2/E2F3/E2F4/E2F5/E2F6/E2F7/ELANE/EP300/ERCC2/ERCC3/ESR1/ETV3/EYA3/FOS/FOXF2/FOXH1/FOXO3/GATA1/GATA2/GATA4/GFI1/GFI1B/GLI3/GMNN/GTF2A1/GTF2A2/GTF2B/GTF2E2/GTF2F1/GTF2F2/GTF2H1/GTF2H2/GTF2H3/GTF2H4/GTF3C1/GTF3C4/HAX1/HDAC1/HDAC2/HDAC3/HDAC4/HDAC9/HES6/HEY2/HIF1A/HIPK2/HMGA1/HMGB1/HNF1B/HOXA10/HOXD12/HYAL2/ING2/IRF9/JAZF1/JUN/JUNB/KAT2A/KAT5/KDM1A/KLF4/LDB1/LEF1/LHX1/LHX3/LMO2/LMO4/MAF/MAFG/MAX/MDM2/MDM4/MED1/MED14/MEF2A/MEN1/MMS19/MNAT1/MTA1/MTA2/MYC/MYOD1/MYOG/NCOA1/NCOA2/NCOA6/NCOR1/NCOR2/NEUROD1/NFAT5/NFATC1/NFATC2/NFE2L2/NFYA/NONO/NPAS2/NR1H2/NR1H3/NR1I2/NR2E3/NR4A1/NR4A2/NR4A3/NR5A1/PARP1/PBX1/PHF12/PITX1/PITX2/PKNOX1/POU2AF1/POU2F1/POU4F1/POU4F2/PPARG/PRDM16/PRKDC/RARA/RARG/RB1/RBBP7/RBBP8/RBL1/RBL2/RBPJ/RCOR1/RELA/RFX3/RLIM/RUNX1/RUNX2/RUNX3/RXRA/RXRB/RXRG/SATB2/SFPQ/SIN3A/SIX1/SKI/SKIL/SKOR1/SMAD1/SMAD2/SMAD3/SMAD4/SMAD5/SMAD6/SMAD7/SMAD9/SNF8/SOX17/SOX2/SOX4/SOX9/SP1/SP3/SPEN/SPI1/STAT1/STAT2/STAT3/STAT4/STAT6/SUB1/TADA3/TAF1/TAF12/TAF4/TAL1/TBL1X/TBL1XR1/TBP/TBX2/TCEA1/TCF3/TCF4/TCF7/TCF7L2/TFAP4/TFDP1/TFDP2/THRB/TLE1/TLE2/TLE4/TLE5/TP53/TRIM28/TRRAP/USF1/VDR/WWOX/WWTR1/XRCC6/YAP1/YY1/ZBTB16/ZFHX3/ZNF350/HCLS1/MXD1/FOSL1/RELB/ARNT2/AATF/CRX/AJUBA/MBD3/JUND/HOXB9/GCM1/MEF2B/CDX2/LIN9/CEBPG/NFYB/RFX5/RFXANK/HAND2/KLF5/NFATC3/GTF2A1L/MYF5/MYF6/TCF7L1/ASCL1/LIN52/EPAS1/XBP1/DACH1/MED28/ZFPM1/GATA6/NFE2L1/CREB3/POU3F1/MEIS1/PBX3/MAFB/MAFF/ATF6/TCF12/DBP/FOSL2/ALX4/NHLH2/FOXE3/NFATC4/ATF7/MXD3/MXI1/HOXC9/RIOX2/NR5A2/SIX3/NFE2/TLE3/TLE6/HAND1/POU3F2/MLXIPL/REST/NFYC/TAF10/LBX1/GSC/CEBPD/TAF1A/NFIL3/SIX6/ATF5/MED15/CHD3/TEAD1/TEAD2/TEAD3/TEAD4
+GO:0031252                                                                                                                AAK1/ABCA7/ABI1/ABL1/ACTA1/ACTB/ACTN1/ACTR2/ADAM17/ADGRV1/ADORA1/ADORA2A/AKAP5/AKT1/AKT2/AMOT/ANGPTL3/APBB1/APBB1IP/APC/APC2/APP/APPL1/ARAP3/ARF1/ARF6/ARHGAP31/ARHGAP44/ARHGEF2/ARHGEF26/ARHGEF4/ARHGEF6/ARHGEF7/ARPC2/ASAP3/ATF4/BAIAP2/BCAR1/BMX/BRK1/BSPRY/CAPRIN1/CD2AP/CD44/CDC42/CDC42BPA/CDC42BPB/CDH1/CDH2/CDK5/CDK6/CDKL5/CFL1/CIB1/CLASP2/CLIP1/CTNNA1/CTNNA3/CTNNB1/CTNND1/CTTN/CTTNBP2NL/CXCR4/CYFIP1/DAG1/DBNL/DDX58/DIAPH1/DLC1/DNM2/DUSP22/EEF1A1/EGFR/EPHA2/EZR/FAM107A/FAP/FER/FERMT1/FERMT2/FGD1/FGD2/FGD3/FGD4/FGD5/FGR/GABBR1/GIT1/GPER1/GSN/HAX1/HDAC6/HPCA/IGF2BP1/ILK/INPPL1/INSR/IQGAP1/ITGA5/ITGA8/ITGAV/ITGB1/ITGB1BP1/ITGB3/ITGB4/ITSN1/JMY/KANK1/KCNA2/KCNB1/KITLG/KNSTRN/KSR1/LDB1/LIMK1/LMO4/MAPT/MEFV/MTSS1/MYLK/NCKAP1/NDEL1/NEDD9/NF2/NHS/NME1/NME2/NRBP1/OPRD1/OPRM1/PABPC1/PAFAH1B1/PAK1/PARD6A/PARVA/PDXP/PIK3CA/PKD2/PKN2/PLCG1/PLCG2/PLEKHG5/PPP1R9B/PRKCI/PRKCZ/PSD3/PSTPIP1/PTK2B/PTK6/PTPN13/PTPRJ/PTPRK/PTPRM/PTPRO/PXN/RAB22A/RAB3IP/RAB5A/RAC1/RAC2/RAC3/RAPGEF3/RASA1/RASGRP2/RDX/RHOA/ROCK1/S100B/SH3BP1/SH3RF1/SLC9A1/SLC9A3R1/SLK/SNX1/SNX9/SPATA13/SPRY2/SPRY4/SRC/SRGAP2/SSH1/STX3/TACR3/TESK1/THEM4/THY1/TIAM2/TIRAP/TLN1/TLR4/TRPM7/TRPV4/TSC1/VASP/WASF1/WASF2/WASF3/WASL/WIPF1/ABI2/ENAH/RAPH1/SORBS2/USH2A/VEZT/RPS3/VIM/MYO5A/KIF18A/SPTBN1/GABRA1/EVL/PIP5K1A/PIP5K1C/AJUBA/TUBG1/ATP2B1/TRPV1/GRIA1/DPP4/SLC1A2/GABRA2/GABRA3/GABRA4/GABRA5/GABRA6/DDX3X/IQGAP2/AMPH/CORO1A/DPYSL3/ACTC1/OCLN/CORO1C/MYH9/SCRIB/ACTR3/PLCE1/TPM1/MYO1C/ARF4/EPS8/EXOC8/MACF1/PIEZO1/LIMA1/SH2D3C/STMN2/PDE4A/ARPC5/TUBB3/UNC5C/UNC5A/MYO6/PACSIN1/ARHGAP18/GBF1/DUOX1/LCP1/CORO1B/CSPG4/DGKZ/PLEK/KCNC4/FSCN1/GABRG2/MYH10/PDLIM4/ARFIP2/ATP6AP2/CAPZB/WWC1/PLXND1/ROBO2/SRCIN1/VIL1/STX4/S100A6/ACTA2/ARPC3/SLC12A5
+GO:0005925                                                                                                                                                                                                      ACTB/ACTN1/ACTN4/ACTR2/ADAM10/ADAM17/ADAM9/AHNAK/ANXA1/APBB1IP/ARF1/ARF6/ARHGAP22/ARHGAP24/ARHGAP26/ARHGAP31/ARHGEF2/ARHGEF7/ARL2/ARPC2/ASAP3/B2M/BCAR1/BCAR3/CALR/CAPN1/CAPN2/CASK/CAV1/CAV3/CBL/CD44/CD59/CD9/CDC42/CDH13/CDH2/CFL1/CHP1/CLASP1/CLASP2/CTNNA1/CTNNB1/CTTN/CYFIP1/DAB2/DAG1/DDR2/DIXDC1/DLC1/DNM2/DOCK7/EFNB2/EGFR/EPHA2/EZR/FAM107A/FAP/FBLIM1/FERMT1/FERMT2/FES/FGFR3/FHL1/FHL2/FLNA/FLT1/FZD1/FZD2/G3BP1/GAK/GIT1/GNA12/GNA13/GNB2/GRB7/GSN/HACD3/HCK/HMGA1/HNRNPK/HSP90B1/HSPA1A/HSPA1B/HSPA5/HSPA8/HSPA9/HSPB1/HSPG2/ICAM1/IL16/ILK/IQGAP1/ITGA1/ITGA11/ITGA2/ITGA2B/ITGA3/ITGA4/ITGA5/ITGA6/ITGA8/ITGAV/ITGB1/ITGB2/ITGB3/ITGB4/ITGB5/ITGB6/ITGB7/ITGB8/JAK1/JAK2/KLF11/KRAS/L1CAM/LAMTOR3/LIMK1/LPP/LRP1/MAP2K1/MAP2K2/MAP4K4/MAPK1/MAPK3/MAPRE1/MARCKS/MDC1/MMP14/NCKAP1/NCSTN/NEDD9/NFASC/NHS/NPHS1/NPM1/NRP1/NUMB/OPRM1/PABPC1/PAK1/PAK4/PARVA/PCBP2/PDCD6IP/PDGFRB/PDIA3/PDPK1/PFN1/PLAU/PLAUR/PPFIA1/PPIA/PPP1CB/PPP1CC/PRKAR2A/PTK2/PTK2B/PTK7/PTPN12/PTPRA/PTPRC/PVR/PXN/RAC1/RAC2/RALA/RDX/RHOA/RHOG/RHOU/RPL5/RPS19/RRAS/RRAS2/SDC4/SDCBP/SENP1/SH3KBP1/SLA/SLC9A1/SLC9A3R2/SNTB1/SORBS1/SPRY4/SRC/STARD8/SVIL/TEK/TGFB1I1/TGM2/THY1/TLE2/TLN1/TNC/TNFSF13B/TNS1/TRIP6/TRPV4/VASP/WASF1/YES1/YWHAB/YWHAE/YWHAG/YWHAQ/YWHAZ/ZYX/CAT/ENAH/LASP1/SORBS2/SORBS3/RPS3/VIM/DCTN4/EVL/MME/PIP5K1A/PIP5K1C/RHOB/AMBRA1/CLTC/AJUBA/KIF23/TNS2/ADD1/VCL/FLNC/BSG/DPP4/PLEC/ADGRE5/MSN/ARPC1B/GJA1/ACTC1/CAV2/CORO1C/MYH9/JUP/ACTR3/PPP1R12A/CD151/RPL6/FLNB/CNN1/CNN3/IGF2R/TRIOBP/RPLP2/CAP1/ACTG1/IL1RL1/IRF2/ANXA5/RAB10/LPXN/LIMA1/ARPC5/RPS5/PROCR/LCP1/CORO1B/CSPG4/CYBA/SLC6A4/ACTN3/MPZL1/GIT2/MPRIP/RND3/FLII/TNS3/SRP68/ENG/ADGRB1/ARPC3
+GO:0030055                                                                                                                                                                                     ACTB/ACTN1/ACTN4/ACTR2/ADAM10/ADAM17/ADAM9/AHNAK/ANXA1/APBB1IP/ARF1/ARF6/ARHGAP22/ARHGAP24/ARHGAP26/ARHGAP31/ARHGEF2/ARHGEF7/ARL2/ARPC2/ASAP3/B2M/BCAR1/BCAR3/CALR/CAPN1/CAPN2/CASK/CAV1/CAV3/CBL/CD44/CD59/CD9/CDC42/CDH13/CDH2/CFL1/CHP1/CLASP1/CLASP2/CTNNA1/CTNNB1/CTTN/CYFIP1/DAB2/DAG1/DDR2/DIXDC1/DLC1/DNM2/DOCK7/EFNB2/EGFR/EPHA2/ERBIN/EZR/FAM107A/FAP/FBLIM1/FERMT1/FERMT2/FERMT3/FES/FGFR3/FHL1/FHL2/FLNA/FLT1/FZD1/FZD2/G3BP1/GAK/GIT1/GNA12/GNA13/GNB2/GRB7/GSN/HACD3/HCK/HMGA1/HNRNPK/HSP90B1/HSPA1A/HSPA1B/HSPA5/HSPA8/HSPA9/HSPB1/HSPG2/ICAM1/IL16/ILK/IQGAP1/ITGA1/ITGA11/ITGA2/ITGA2B/ITGA3/ITGA4/ITGA5/ITGA6/ITGA8/ITGAV/ITGB1/ITGB2/ITGB3/ITGB4/ITGB5/ITGB6/ITGB7/ITGB8/JAK1/JAK2/KLF11/KRAS/L1CAM/LAMTOR3/LIMK1/LPP/LRP1/MAP2K1/MAP2K2/MAP4K4/MAPK1/MAPK3/MAPRE1/MARCKS/MDC1/MMP14/NCKAP1/NCSTN/NEDD9/NFASC/NHS/NPHS1/NPM1/NRP1/NUMB/OPRM1/PABPC1/PAK1/PAK4/PARVA/PCBP2/PDCD6IP/PDGFRB/PDIA3/PDPK1/PFN1/PLAU/PLAUR/PPFIA1/PPIA/PPP1CB/PPP1CC/PRKAR2A/PTK2/PTK2B/PTK7/PTPN12/PTPRA/PTPRC/PVR/PXN/RAC1/RAC2/RALA/RDX/RHOA/RHOG/RHOU/RPL5/RPS19/RRAS/RRAS2/SDC4/SDCBP/SENP1/SH3KBP1/SLA/SLC9A1/SLC9A3R2/SNTB1/SORBS1/SPRY4/SRC/STARD8/SVIL/TEK/TGFB1I1/TGM2/THY1/TLE2/TLN1/TNC/TNFSF13B/TNS1/TRIP6/TRPV4/VASP/WASF1/YES1/YWHAB/YWHAE/YWHAG/YWHAQ/YWHAZ/ZYX/CAT/ENAH/LASP1/SORBS2/SORBS3/RPS3/VIM/DCTN4/DMD/EVL/MME/PIP5K1A/PIP5K1C/RHOB/AMBRA1/CLTC/AJUBA/KIF23/TNS2/ADD1/VCL/FLNC/BSG/DPP4/PLEC/ADGRE5/MSN/ARPC1B/GJA1/ACTC1/CAV2/CORO1C/MYH9/JUP/ACTR3/PPP1R12A/CD151/RPL6/FLNB/CNN1/CNN3/IGF2R/TRIOBP/RPLP2/CAP1/ACTG1/IL1RL1/IRF2/ANXA5/RAB10/LPXN/LIMA1/ARPC5/RPS5/PROCR/LCP1/CORO1B/CSPG4/CYBA/SLC6A4/ACTN3/MPZL1/GIT2/MPRIP/RND3/FLII/TNS3/SRP68/ENG/ADGRB1/ARPC3
+GO:0045121                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   ACE2/ADAM17/ADGRG1/ADRA1A/ADRA1B/AHNAK/AKAP5/ANGPT1/ANK2/ANXA2/APP/ARID3A/BACE1/BCL10/BIRC2/BIRC3/BMPR1A/BMPR2/BTK/BVES/CAPN2/CARD11/CASP3/CASP8/CAV1/CAV3/CBL/CBLB/CBLC/CD14/CD19/CD24/CD4/CD48/CD55/CD8A/CDH1/CDH13/CDH15/CDH2/CFLAR/CHRNA7/CNR1/CNTN1/CRK/CSK/CTNNA1/CTNNB1/CTSD/DAG1/DLC1/DLG1/DLL1/EDNRB/EFNA5/EFNB1/EGFR/EPHB1/EZR/F2R/FADD/FAS/FASLG/FURIN/FYN/GABBR1/GHSR/GNAI2/GNAI3/HAS2/HCK/HDAC6/HMOX1/HTR2A/HYAL2/ICAM1/IGF1R/IKBKB/IL6ST/INPP5D/INSR/IRS1/ITGA1/ITGAM/ITGB1/ITGB2/JAK2/KCNE1/KDR/LAMTOR1/LAMTOR3/LAT/LAT2/LCK/LCP2/LRP6/LRP8/LRRK2/LYN/MAPK1/MAPK3/MAPT/NOS1/NPHS2/OPRD1/OPRM1/ORAI1/PAG1/PARK7/PECAM1/PI4K2A/PPP2CA/PPP2R1B/PRKACA/PRKAR1A/PRKAR2A/PRKAR2B/PRKCZ/PRNP/PRTN3/PSEN1/PSEN2/PTCH1/PTGS2/PTK2B/PTPRC/RAB5A/RET/RGS19/RHOQ/RIPK1/RIT2/S100A10/S1PR1/SCARB1/SDC4/SDCBP/SELPLG/SHH/SLC9A1/SLC9A3R1/SMO/SMURF2/SORBS1/SRC/STAT6/STIM1/STOM/STOML2/TDGF1/TEK/TFPI/TGFBR1/TGFBR2/THY1/TLR1/TLR2/TNF/TNFRSF10A/TNFRSF1A/TNFRSF1B/TNR/TRADD/TRAF2/TRPC4/TRPC5/TUBB/UNC5B/ZAP70/PLSCR1/SYNJ2/NOS3/ADCYAP1R1/HK1/PIKFYVE/KIF18A/DMD/ABCA1/MME/VDAC1/CR1/ADCY1/ADCY8/ATP2B1/LIPE/KCND2/SCN5A/BSG/DPP4/SLC1A1/SLC1A2/NEU3/CD2/GJA1/GPC1/GP6/CD36/OLR1/CAV2/CORO1C/MYO1C/SLC6A3/SLC2A1/CD79A/MAG/SKAP1/ADCY2/PGK1/TRPM8/CD226/KCNQ1/MS4A1/ATP1A1/SLC2A4/UNC5A/KCNA3/NTSR1/TUBA1C/ABCG2/ADD2/FXYD1/KCNMA1/RGS7/SLC6A4/ATP2B4/RTN4R/LRP4/SELE/LDHB/LAMTOR5/ATP1B1
+GO:0098857                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   ACE2/ADAM17/ADGRG1/ADRA1A/ADRA1B/AHNAK/AKAP5/ANGPT1/ANK2/ANXA2/APP/ARID3A/BACE1/BCL10/BIRC2/BIRC3/BMPR1A/BMPR2/BTK/BVES/CAPN2/CARD11/CASP3/CASP8/CAV1/CAV3/CBL/CBLB/CBLC/CD14/CD19/CD24/CD4/CD48/CD55/CD8A/CDH1/CDH13/CDH15/CDH2/CFLAR/CHRNA7/CNR1/CNTN1/CRK/CSK/CTNNA1/CTNNB1/CTSD/DAG1/DLC1/DLG1/DLL1/EDNRB/EFNA5/EFNB1/EGFR/EPHB1/EZR/F2R/FADD/FAS/FASLG/FURIN/FYN/GABBR1/GHSR/GNAI2/GNAI3/HAS2/HCK/HDAC6/HMOX1/HTR2A/HYAL2/ICAM1/IGF1R/IKBKB/IL6ST/INPP5D/INSR/IRS1/ITGA1/ITGAM/ITGB1/ITGB2/JAK2/KCNE1/KDR/LAMTOR1/LAMTOR3/LAT/LAT2/LCK/LCP2/LRP6/LRP8/LRRK2/LYN/MAPK1/MAPK3/MAPT/NOS1/NPHS2/OPRD1/OPRM1/ORAI1/PAG1/PARK7/PECAM1/PI4K2A/PPP2CA/PPP2R1B/PRKACA/PRKAR1A/PRKAR2A/PRKAR2B/PRKCZ/PRNP/PRTN3/PSEN1/PSEN2/PTCH1/PTGS2/PTK2B/PTPRC/RAB5A/RET/RGS19/RHOQ/RIPK1/RIT2/S100A10/S1PR1/SCARB1/SDC4/SDCBP/SELPLG/SHH/SLC9A1/SLC9A3R1/SMO/SMURF2/SORBS1/SRC/STAT6/STIM1/STOM/STOML2/TDGF1/TEK/TFPI/TGFBR1/TGFBR2/THY1/TLR1/TLR2/TNF/TNFRSF10A/TNFRSF1A/TNFRSF1B/TNR/TRADD/TRAF2/TRPC4/TRPC5/TUBB/UNC5B/ZAP70/PLSCR1/SYNJ2/NOS3/ADCYAP1R1/HK1/PIKFYVE/KIF18A/DMD/ABCA1/MME/VDAC1/CR1/ADCY1/ADCY8/ATP2B1/LIPE/KCND2/SCN5A/BSG/DPP4/SLC1A1/SLC1A2/NEU3/CD2/GJA1/GPC1/GP6/CD36/OLR1/CAV2/CORO1C/MYO1C/SLC6A3/SLC2A1/CD79A/MAG/SKAP1/ADCY2/PGK1/TRPM8/CD226/KCNQ1/MS4A1/ATP1A1/SLC2A4/UNC5A/KCNA3/NTSR1/TUBA1C/ABCG2/ADD2/FXYD1/KCNMA1/RGS7/SLC6A4/ATP2B4/RTN4R/LRP4/SELE/LDHB/LAMTOR5/ATP1B1
+           Count
+GO:0005667   319
+GO:0031252   281
+GO:0005925   278
+GO:0030055   281
+GO:0045121   231
+GO:0098857   231</code></pre>
+<pre class="r"><code># Variety of ways to visualize
+# barplot
+barplot(ego)</code></pre>
+<p><img src="figure/Carnival_subsets_khavari_final.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># dotplot
+dotplot(ego)</code></pre>
+<p><img src="figure/Carnival_subsets_khavari_final.Rmd/unnamed-chunk-8-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#Heat plot showing the enriched GO terms on the y-axis and the genes on the x-axis. Genes with the associated GO term are highlighted.
+heatplot(ego)</code></pre>
+<p><img src="figure/Carnival_subsets_khavari_final.Rmd/unnamed-chunk-8-3.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># goplot shows the gene ontology graph with the enriched GO terms highlighted.
+goplot(ego)</code></pre>
+<p><img src="figure/Carnival_subsets_khavari_final.Rmd/unnamed-chunk-8-4.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<ol style="list-style-type: decimal">
+<li><p>Liu A, Trairatphisan P, Gjerga E, Didangelos A, Barratt J, Saez-Rodriguez J. From expression footprints to causal pathways: contextualizing large signaling networks with CARNIVAL. NPJ systems biology and applications. 2019;5(1):40.</p></li>
+<li><p>Kim DS, Risca VI, Reynolds DL, Chappell J, Rubin AJ, Jung N, et al. The dynamic, combinatorial cis-regulatory lexicon of epidermal differentiation. Nature genetics. 2021;53(11):1564-76.</p></li>
+</ol>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.2.0 (2022-04-22 ucrt)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 22000)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=Dutch_Netherlands.utf8  LC_CTYPE=Dutch_Netherlands.utf8   
+[3] LC_MONETARY=Dutch_Netherlands.utf8 LC_NUMERIC=C                      
+[5] LC_TIME=Dutch_Netherlands.utf8    
+
+attached base packages:
+[1] stats4    stats     graphics  grDevices utils     datasets  methods  
+[8] base     
+
+other attached packages:
+ [1] clusterProfiler_4.4.2 org.Hs.eg.db_3.15.0   tidygraph_1.2.1      
+ [4] ggraph_2.0.5          cowplot_1.1.1         reshape2_1.4.4       
+ [7] network_1.17.1        GSEABase_1.58.0       graph_1.74.0         
+[10] annotate_1.74.0       XML_3.99-0.9          AnnotationDbi_1.58.0 
+[13] IRanges_2.30.0        S4Vectors_0.34.0      Biobase_2.56.0       
+[16] BiocGenerics_0.42.0   plyr_1.8.7            scales_1.2.0         
+[19] piano_2.12.0          RColorBrewer_1.1-3    forcats_0.5.1        
+[22] stringr_1.4.0         purrr_0.3.4           tidyverse_1.3.1      
+[25] ggrepel_0.9.1         pheatmap_1.0.12       ggplot2_3.3.6        
+[28] visNetwork_2.1.0      dplyr_1.0.9           tidyr_1.2.0          
+[31] tibble_3.1.7          readr_2.1.2           OmnipathR_3.4.0      
+[34] CARNIVAL_2.6.0        dorothea_1.8.0        progeny_1.18.0       
+[37] here_1.0.1           
+
+loaded via a namespace (and not attached):
+  [1] utf8_1.2.2             shinydashboard_0.7.2   tidyselect_1.1.2      
+  [4] RSQLite_2.2.14         htmlwidgets_1.5.4      grid_4.2.0            
+  [7] BiocParallel_1.30.0    lpSolve_5.6.15         scatterpie_0.1.7      
+ [10] munsell_0.5.0          DT_0.23                withr_2.5.0           
+ [13] colorspace_2.0-3       GOSemSim_2.22.0        logger_0.2.2          
+ [16] highr_0.9              knitr_1.39             rstudioapi_0.13       
+ [19] DOSE_3.22.0            labeling_0.4.2         git2r_0.30.1          
+ [22] slam_0.1-50            GenomeInfoDbData_1.2.8 polyclip_1.10-0       
+ [25] bit64_4.0.5            farver_2.1.0           rprojroot_2.0.3       
+ [28] downloader_0.4         treeio_1.20.0          coda_0.19-4           
+ [31] vctrs_0.4.1            generics_0.1.2         xfun_0.30             
+ [34] sets_1.0-21            R6_2.5.1               GenomeInfoDb_1.32.1   
+ [37] graphlayouts_0.8.0     gridGraphics_0.5-1     bitops_1.0-7          
+ [40] cachem_1.0.6           fgsea_1.22.0           assertthat_0.2.1      
+ [43] promises_1.2.0.1       vroom_1.5.7            enrichplot_1.16.1     
+ [46] gtable_0.3.0           workflowr_1.7.0        rlang_1.0.2           
+ [49] splines_4.2.0          lazyeval_0.2.2         broom_0.8.0           
+ [52] checkmate_2.1.0        yaml_2.3.5             modelr_0.1.8          
+ [55] backports_1.4.1        httpuv_1.6.5           qvalue_2.28.0         
+ [58] tools_4.2.0            relations_0.6-12       ggplotify_0.1.0       
+ [61] statnet.common_4.6.0   ellipsis_0.3.2         gplots_3.1.3          
+ [64] jquerylib_0.1.4        Rcpp_1.0.8.3           progress_1.2.2        
+ [67] zlibbioc_1.42.0        RCurl_1.98-1.6         prettyunits_1.1.1     
+ [70] viridis_0.6.2          haven_2.5.0            cluster_2.1.3         
+ [73] fs_1.5.2               magrittr_2.0.3         data.table_1.14.2     
+ [76] DO.db_2.9              reprex_2.0.1           patchwork_1.1.1       
+ [79] hms_1.1.1              shinyjs_2.1.0          mime_0.12             
+ [82] evaluate_0.15          xtable_1.8-4           readxl_1.4.0          
+ [85] gridExtra_2.3          compiler_4.2.0         shadowtext_0.1.2      
+ [88] KernSmooth_2.23-20     crayon_1.5.1           htmltools_0.5.2       
+ [91] ggfun_0.0.6            later_1.3.0            tzdb_0.3.0            
+ [94] aplot_0.1.6            lubridate_1.8.0        DBI_1.1.2             
+ [97] tweenr_1.0.2           dbplyr_2.2.0           MASS_7.3-56           
+[100] rappdirs_0.3.3         Matrix_1.4-1           bcellViper_1.32.0     
+[103] cli_3.3.0              marray_1.74.0          parallel_4.2.0        
+[106] igraph_1.3.1           pkgconfig_2.0.3        xml2_1.3.3            
+[109] ggtree_3.4.0           bslib_0.3.1            XVector_0.36.0        
+[112] rvest_1.0.2            yulab.utils_0.0.4      digest_0.6.29         
+[115] Biostrings_2.64.0      rmarkdown_2.14         cellranger_1.1.0      
+[118] fastmatch_1.1-3        tidytree_0.3.9         curl_4.3.2            
+[121] shiny_1.7.1            gtools_3.9.2           rjson_0.2.21          
+[124] nlme_3.1-157           lifecycle_1.0.1        jsonlite_1.8.0        
+[127] viridisLite_0.4.0      limma_3.52.0           fansi_1.0.3           
+[130] pillar_1.7.0           lattice_0.20-45        KEGGREST_1.36.0       
+[133] fastmap_1.1.0          httr_1.4.3             GO.db_3.15.0          
+[136] glue_1.6.2             png_0.1-7              bit_4.0.4             
+[139] ggforce_0.3.3          stringi_1.7.6          sass_0.4.1            
+[142] blob_1.2.3             caTools_1.18.2         memoise_2.0.1         
+[145] ape_5.6-2             </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
